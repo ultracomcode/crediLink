@@ -1,6 +1,5 @@
-package com.main.CrediLink.domain.repository;
+package com.main.CrediLink.domain.token;
 
-import com.main.CrediLink.domain.entity.TokenEntityItau;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

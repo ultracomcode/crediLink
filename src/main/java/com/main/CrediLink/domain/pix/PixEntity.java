@@ -1,5 +1,6 @@
-package com.main.CrediLink.domain.entity;
+package com.main.CrediLink.domain.pix;
 
+import com.main.CrediLink.domain.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PixPaymentEntity {
+public class PixEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,12 @@ public class PixPaymentEntity {
 
     private String observacao;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     private String accountcode;
+
     @Column(name = "qrcode", length = 5048)
     private String qrcode;
 

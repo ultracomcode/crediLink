@@ -1,16 +1,14 @@
-package com.main.CrediLink.domain.services;
+package com.main.CrediLink.domain.pix;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.main.CrediLink.domain.dto.PixQrCodeResponseDto;
-import com.main.CrediLink.domain.dto.PixRequest;
-import com.main.CrediLink.domain.dto.UserDTO;
-import com.main.CrediLink.domain.dto.responsePix.createPixPaymentDTO;
-import com.main.CrediLink.domain.entity.PixPaymentEntity;
-import com.main.CrediLink.domain.repository.PixPaymentRepository;
+import com.main.CrediLink.domain.pix.dto.PixQrCodeResponseDto;
+import com.main.CrediLink.domain.pix.dto.PixRequest;
+import com.main.CrediLink.domain.user.dto.UserDTO;
+import com.main.CrediLink.domain.pix.dto.responsePix.createPixPaymentDTO;
 import com.main.CrediLink.exceptions.PixException;
 import com.main.CrediLink.itau.feing.ItauPixClient;
 import com.main.CrediLink.itau.service.ItauTokenService;
@@ -28,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Service
-public class PixCobrancaService {
+public class PixService {
     @Value("${itau.chave.pix}")
     private String chavePix;
 
@@ -37,12 +35,12 @@ public class PixCobrancaService {
 
     private final ItauPixClient itauPixClient;
     private final ItauTokenService itauTokenService;
-    private final PixPaymentRepository pixPaymentRepository;
+    private final PixRepository pixRepository;
 
-    public PixCobrancaService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixPaymentRepository pixPaymentRepository) {
+    public PixService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixRepository pixRepository) {
         this.itauPixClient = itauPixClient;
         this.itauTokenService = itauTokenService;
-        this.pixPaymentRepository = pixPaymentRepository;
+        this.pixRepository = pixRepository;
     }
 
     public PixQrCodeResponseDto createPixPayment(UserDTO userDTO) {
@@ -84,12 +82,12 @@ public class PixCobrancaService {
 
     private PixQrCodeResponseDto save(createPixPaymentDTO dto, UserDTO userDTO) {
 
-        PixPaymentEntity entity = buildPixEntity(dto, userDTO);
+        PixEntity entity = buildPixEntity(dto, userDTO);
 
         var qrCodeBase64 = createQRCodeImage(dto.pixCopiaECola());
         entity.setQrcode(qrCodeBase64);
 
-        pixPaymentRepository.save(entity);
+        pixRepository.save(entity);
 
         return PixQrCodeResponseDto.fromEntity(entity);
 
@@ -104,8 +102,8 @@ public class PixCobrancaService {
         return request;
     }
 
-    private PixPaymentEntity buildPixEntity(createPixPaymentDTO dto, UserDTO userDTO) {
-        PixPaymentEntity entity = new PixPaymentEntity();
+    private PixEntity buildPixEntity(createPixPaymentDTO dto, UserDTO userDTO) {
+        PixEntity entity = new PixEntity();
         BeanUtils.copyProperties(dto, entity);
         entity.setCriacao(OffsetDateTime.parse(dto.calendario().criacao()));
         entity.setValor(dto.valor().original());

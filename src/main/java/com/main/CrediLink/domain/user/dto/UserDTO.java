@@ -1,6 +1,6 @@
-package com.main.CrediLink.domain.dto;
+package com.main.CrediLink.domain.user.dto;
 
-import com.main.CrediLink.domain.entity.PixPaymentEntity;
+import com.main.CrediLink.domain.pix.PixEntity;
 
 public record UserDTO(
         String username,
@@ -8,7 +8,7 @@ public record UserDTO(
         String value,
         String obs
 ) {
-    public static UserDTO fromEntity(PixPaymentEntity entity) {
+    public static UserDTO fromEntity(PixEntity entity) {
         return new UserDTO(
                 entity.getUsername(),
                 entity.getDomain(),

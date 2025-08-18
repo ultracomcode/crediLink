@@ -1,7 +1,6 @@
-package com.main.CrediLink.domain.controllers;
+package com.main.CrediLink.domain.pix.webHook;
 
-import com.main.CrediLink.domain.dto.PixNotificacaoDTO;
-import com.main.CrediLink.domain.services.PixWebhookService;
+import com.main.CrediLink.domain.pix.webHook.dto.PixNotificacaoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

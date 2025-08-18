@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.dto;
+package com.main.CrediLink.domain.pix.webHook.dto;
 
 public record PixNotificacaoDTO(
         String endToEndId,

@@ -1,26 +1,27 @@
-package com.main.CrediLink.domain.services;
+package com.main.CrediLink.domain.pix.webHook;
 
-import com.main.CrediLink.domain.dto.PixNotificacaoDTO;
-import com.main.CrediLink.domain.dto.UserDTO;
-import com.main.CrediLink.domain.repository.PixPaymentRepository;
+import com.main.CrediLink.domain.pix.webHook.dto.PixNotificacaoDTO;
+import com.main.CrediLink.domain.user.dto.UserDTO;
+import com.main.CrediLink.domain.pix.PixRepository;
+import com.main.CrediLink.sippulse.services.SipPulseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class PixWebhookService {
-    private final PixPaymentRepository pixPaymentRepository;
+    private final PixRepository pixRepository;
     private final SipPulseService sipPulseService;
 
-    public PixWebhookService(PixPaymentRepository pixPaymentRepository, SipPulseService sipPulseService) {
-        this.pixPaymentRepository = pixPaymentRepository;
+    public PixWebhookService(PixRepository pixRepository, SipPulseService sipPulseService) {
+        this.pixRepository = pixRepository;
         this.sipPulseService = sipPulseService;
     }
 
     public void CheckWebhookNotifications(List<PixNotificacaoDTO> pixList) {
         pixList.forEach(notify ->{
 
-            var txidFound = pixPaymentRepository.findByTxid(notify.txid());
+            var txidFound = pixRepository.findByTxid(notify.txid());
 
             txidFound.ifPresent(entity -> {
 
@@ -30,7 +31,7 @@ public class PixWebhookService {
 
                     entity.setStatus("CONCLUIDO");
 
-                    pixPaymentRepository.save(entity);
+                    pixRepository.save(entity);
                 }
             });
 

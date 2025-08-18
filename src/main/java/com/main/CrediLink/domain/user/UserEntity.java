@@ -1,12 +1,10 @@
-package com.main.CrediLink.domain.entity;
+package com.main.CrediLink.domain.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity(name = "usuarios")
 @Table(name = "usuarios")
@@ -18,7 +16,7 @@ public class UserEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private Long id;
 
     private String name;
 
@@ -28,8 +26,10 @@ public class UserEntity{
 
     private String password;
 
-    private String cpf_cnpj;
+    private String cpfCnpj;
 
     private String phone;
+
+    private String idCrm;
 
 }
