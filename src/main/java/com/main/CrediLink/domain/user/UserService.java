@@ -4,6 +4,8 @@ import com.main.CrediLink.domain.user.dto.RequestUserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -21,5 +23,9 @@ public class UserService {
         BeanUtils.copyProperties(requestUserDTO, userEntity);
 
         return userRepository.save(userEntity);
+    }
+
+    public List<UserEntity> findAll(){
+        return userRepository.findAll();
     }
 }

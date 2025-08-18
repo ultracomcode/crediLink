@@ -21,4 +21,9 @@ public class UserController {
     public ResponseEntity<UserEntity> save(@RequestBody @Valid RequestUserDTO requestUserDTO){
         return ResponseEntity.ok(userService.save(requestUserDTO));
     }
+
+    @RequestMapping("/findAll")
+    public ResponseEntity<Iterable<UserEntity>> findAll(){
+        return ResponseEntity.ok(userService.findAll());
+    }
 }
