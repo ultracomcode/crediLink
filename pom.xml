@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.3</version>
+		<relativePath/>
+	</parent>
+	<groupId>com.main</groupId>
+	<artifactId>CrediLink</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>CrediLink</name>
+	<description>O CrediLink é uma solução de integração que permite aos clientes do tipo pré-pago realizar recargas de suas contas de forma simples e rápida diretamente a partir do painel do cliente. Ao clicar em um botão específico, o sistema redireciona o usuário para uma aplicação externa de recarga, enviando automaticamente o accountcode do cliente para facilitar a identificação e o pré-preenchimento dos dados.  Essa integração visa melhorar a experiência do cliente, proporcionando um processo de recarga ágil, seguro e automatizado, reduzindo erros e agilizando o atendimento. O projeto inclui o desenvolvimento do botão no painel, o envio seguro dos parâmetros necessários e o suporte à comunicação entre os sistemas envolvidos.  Além disso, o CrediLink prevê a possibilidade de personalização conforme a plataforma de recarga utilizada, garantindo flexibilidade e escalabilidade para futuras integrações.</description>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+	<dependencies>
+		<!-- JÁ TEM - Dependências básicas Spring Boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+
+		<!-- ADICIONAIS NECESSÁRIAS - Cliente HTTP para APIs bancárias -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+        <!-- Exemplo para Maven -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+            <version>13.5</version>
+        </dependency>
+
+		<!-- ADICIONAIS NECESSÁRIAS - Geração de QR Code -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+
+		<!-- ADICIONAIS NECESSÁRIAS - Certificados SSL/mTLS -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>1.81</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk18on</artifactId>
+			<version>1.81</version>
+		</dependency>
+
+		<!-- ADICIONAIS NECESSÁRIAS - Processamento assíncrono -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-quartz</artifactId>
+		</dependency>
+
+		<!-- JÁ TEM - Dependências de desenvolvimento -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- Jakarta JWS -->
+		<dependency>
+			<groupId>jakarta.jws</groupId>
+			<artifactId>jakarta.jws-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- Jakarta XML Web Services -->
+		<dependency>
+			<groupId>jakarta.xml.ws</groupId>
+			<artifactId>jakarta.xml.ws-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- JAX-WS Runtime -->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+
+		<!-- JAXB API -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<!-- JAXB Runtime -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+		<!-- Ferramentas opcionais -->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-tools</artifactId>
+			<version>3.0.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- JÁ TEM - Plugin do Lombok -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+
+			<!--  JÁ TEM - Plugin Spring Boot -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!--  ADICIONAL - Plugin para gerar imagens do QR Code -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+						<nonFilteredFileExtension>crt</nonFilteredFileExtension>
+						<nonFilteredFileExtension>key</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>http://181.191.206.175:8080/SipPulse/SubscriberWS?wsdl</wsdlUrl>
+							</wsdlUrls>
+							<packageName>com.main.CrediLink.sippulse.wsdlSippulse</packageName>
+							<sourceDestDir>src/main/java</sourceDestDir>
+							<keep>true</keep>
+							<verbose>true</verbose>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+</project>

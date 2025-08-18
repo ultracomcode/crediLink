@@ -1,0 +1,62 @@
+package com.main.CrediLink.domain.services;
+
+import com.main.CrediLink.domain.dto.UserDTO;
+import com.main.CrediLink.exceptions.SoapIntegrationException;
+import com.main.CrediLink.sippulse.wsdlSippulse.SipPulse;
+import com.main.CrediLink.sippulse.wsdlSippulse.SubscriberWS;
+import com.main.CrediLink.sippulse.wsdlSippulse.UserPrincipalDTO;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+
+@Service
+public class SipPulseService {
+
+    @Value("${sippulse.loginPrincipal}")
+    private String login;
+
+    @Value("${sippulse.passwordPrincipal}")
+    private String password;
+
+    @Value("${sippulse.ws.url}")
+    private String serviceUrl;
+
+    private SubscriberWS getSubscriberWSPort() {
+        try {
+            URL wsdlUrl = new URL(serviceUrl + "?wsdl");
+            SipPulse service = new SipPulse(wsdlUrl);
+            return service.getSubscriberWSPort();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("URL do serviço inválida: " + serviceUrl, e);
+        }
+    }
+
+    public void addCredit(UserDTO userDTO) {
+        try {
+            SubscriberWS port = getSubscriberWSPort();
+            UserPrincipalDTO principal = createUserPrincipal();
+
+            port.addCredit(
+                    userDTO.username(),
+                    userDTO.domain(),
+                    Double.parseDouble(userDTO.value()),
+                    userDTO.obs(),
+                    principal
+            );
+
+        } catch (Exception e) {
+            throw new SoapIntegrationException("Erro ao comunicar com o serviço SOAP: " + getRootCauseMessage(e), e);
+        }
+    }
+
+    private UserPrincipalDTO createUserPrincipal() {
+        UserPrincipalDTO userPrincipal = new UserPrincipalDTO();
+        userPrincipal.setLogin(login);
+        userPrincipal.setPassword(password);
+        return userPrincipal;
+    }
+}
