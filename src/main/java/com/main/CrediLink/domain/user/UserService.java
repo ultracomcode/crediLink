@@ -1,6 +1,7 @@
 package com.main.CrediLink.domain.user;
 
 import com.main.CrediLink.domain.user.dto.RequestUserDTO;
+import com.main.CrediLink.exceptions.UserException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,9 @@ public class UserService {
 
     public List<UserEntity> findAll(){
         return userRepository.findAll();
+    }
+
+    public UserEntity findById(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new UserException("Usuario Não encontrado"));
     }
 }
