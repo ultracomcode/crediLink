@@ -20,16 +20,20 @@ public class UserEntity{
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
+    @Column(unique = true)
     private String cpfCnpj;
 
     private String phone;
 
+    @Column(unique = true)
     private String idCrm;
 
 }
