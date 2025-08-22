@@ -6,9 +6,11 @@ import com.main.CrediLink.sippulse.services.SipPulseService;
 import com.main.CrediLink.sippulse.services.SubscriberService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("${tag.version}")
 public class PixController {
 
     private final PixService pixService;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("${tag.version}")
 public class UserController {
 
     private final UserService userService;
@@ -17,13 +17,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/save")
-    public ResponseEntity<UserEntity> save(@RequestBody @Valid RequestUserDTO requestUserDTO){
-        return ResponseEntity.ok(userService.save(requestUserDTO));
-    }
-
-    @RequestMapping("/findAll")
+    @RequestMapping("/users")
     public ResponseEntity<Iterable<UserEntity>> findAll(){
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @RequestMapping("/users/save")
+    public ResponseEntity<UserEntity> save(@RequestBody @Valid RequestUserDTO requestUserDTO){
+        return ResponseEntity.ok(userService.save(requestUserDTO));
     }
 }

@@ -1,8 +1,6 @@
-package com.main.CrediLink.itau.service;
+package com.main.CrediLink.domain.token;
 
 
-import com.main.CrediLink.domain.token.TokenEntityItau;
-import com.main.CrediLink.domain.token.TokenItauRepository;
 import com.main.CrediLink.itau.dto.FetchTokenResponse;
 import com.main.CrediLink.itau.feing.ItauTokenClient;
 import org.springframework.beans.factory.annotation.Value;

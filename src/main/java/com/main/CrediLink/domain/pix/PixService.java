@@ -11,7 +11,7 @@ import com.main.CrediLink.domain.user.dto.UserDTO;
 import com.main.CrediLink.domain.pix.dto.responsePix.createPixPaymentDTO;
 import com.main.CrediLink.exceptions.PixException;
 import com.main.CrediLink.itau.feing.ItauPixClient;
-import com.main.CrediLink.itau.service.ItauTokenService;
+import com.main.CrediLink.domain.token.ItauTokenService;
 import feign.FeignException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
