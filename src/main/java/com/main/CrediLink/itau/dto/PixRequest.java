@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.pix.dto;
+package com.main.CrediLink.itau.dto;
 
 import lombok.Getter;
 import lombok.Setter;

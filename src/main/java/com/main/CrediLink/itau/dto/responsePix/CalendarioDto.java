@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.pix.dto.responsePix;
+package com.main.CrediLink.itau.dto.responsePix;
 
 public record CalendarioDto(
         String criacao,

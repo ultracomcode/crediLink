@@ -1,8 +1,12 @@
 package com.main.CrediLink.sippulse.services;
 
 import com.main.CrediLink.exceptions.AccountCodeNotFoundException;
+import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
+import com.main.CrediLink.sippulse.entity.Subscriber;
 import com.main.CrediLink.sippulse.repository.SubscriberRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SubscriberService {
@@ -19,6 +23,11 @@ public class SubscriberService {
                 .orElseThrow(() -> new AccountCodeNotFoundException(
                         String.format("AccountCode '%s' não encontrado", accountCode)
                 )) != null;
+    }
+
+    public AccountCodesDTO findAllAccountcode(String firstName){
+        List<String> accounts = subscriberRepository.findAllAccountcode(firstName);
+        return new AccountCodesDTO(accounts);
     }
 
 }

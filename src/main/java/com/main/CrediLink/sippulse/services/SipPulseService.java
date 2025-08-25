@@ -1,7 +1,8 @@
 package com.main.CrediLink.sippulse.services;
 
-import com.main.CrediLink.domain.user.dto.UserDTO;
+import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.exceptions.SoapIntegrationException;
+import com.main.CrediLink.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.sippulse.wsdlSippulse.SipPulse;
 import com.main.CrediLink.sippulse.wsdlSippulse.SubscriberWS;
 import com.main.CrediLink.sippulse.wsdlSippulse.UserPrincipalDTO;
@@ -35,16 +36,16 @@ public class SipPulseService {
         }
     }
 
-    public void addCredit(UserDTO userDTO) {
+    public void addCredit(AddCreditDTO addCreditDTO) {
         try {
             SubscriberWS port = getSubscriberWSPort();
             UserPrincipalDTO principal = createUserPrincipal();
 
             port.addCredit(
-                    userDTO.username(),
-                    userDTO.domain(),
-                    Double.parseDouble(userDTO.value()),
-                    userDTO.obs(),
+                    addCreditDTO.username(),
+                    addCreditDTO.domain(),
+                    Double.parseDouble(addCreditDTO.value()),
+                    addCreditDTO.obs(),
                     principal
             );
 
