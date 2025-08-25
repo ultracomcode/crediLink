@@ -1,19 +1,29 @@
 package com.main.CrediLink.domain.user.dto;
 
-import com.main.CrediLink.domain.pix.PixEntity;
+import com.main.CrediLink.domain.user.UserEntity;
 
-public record UserDTO(
+public record ResponseUserDTO(
+        Long id,
+        String name,
+        String email,
         String username,
-        String domain,
-        String value,
-        String obs
+        String cpfCnpj,
+        String phone,
+        String idCrm,
+        String status,
+        String role
 ) {
-    public static UserDTO fromEntity(PixEntity entity) {
-        return new UserDTO(
-                entity.getUsername(),
-                entity.getDomain(),
-                entity.getValor(),
-                entity.getObservacao()
+    public static ResponseUserDTO fromEntity(UserEntity userEntity){
+        return new ResponseUserDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getEmail(),
+                userEntity.getUsername(),
+                userEntity.getCpfCnpj(),
+                userEntity.getPhone(),
+                userEntity.getIdCrm(),
+                userEntity.getStatus().toString(),
+                userEntity.getRole().toString()
         );
     }
 }

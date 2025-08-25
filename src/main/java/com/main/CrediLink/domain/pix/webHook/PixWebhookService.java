@@ -1,8 +1,9 @@
 package com.main.CrediLink.domain.pix.webHook;
 
 import com.main.CrediLink.domain.pix.webHook.dto.PixNotificacaoDTO;
-import com.main.CrediLink.domain.user.dto.UserDTO;
+import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.domain.pix.PixRepository;
+import com.main.CrediLink.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.sippulse.services.SipPulseService;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class PixWebhookService {
 
                 if(entity.getStatus().equals("ATIVO")) {
 
-                    sipPulseService.addCredit(UserDTO.fromEntity(entity));
+                    sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
 
                     entity.setStatus("CONCLUIDO");
 

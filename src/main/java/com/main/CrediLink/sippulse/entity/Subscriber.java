@@ -14,4 +14,7 @@ public class Subscriber {
 
     @Column(name = "account_code")
     private String accountCode;
+
+    @Column(name = "first_name")
+    private String first_name;
 }

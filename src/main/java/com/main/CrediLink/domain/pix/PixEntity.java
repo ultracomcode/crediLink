@@ -4,6 +4,7 @@ import com.main.CrediLink.domain.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PixEntity {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,8 +58,10 @@ public class PixEntity {
     private String qrcode;
 
     @PrePersist
-    public void createAccountCode() {
-        this.accountcode = this.username + '@' + this.domain;
+    public void setUsernameAndDomain() {
+        String[] usernameDomain = accountcode.split("@");
+        this.username = usernameDomain[0];
+        this.domain = usernameDomain[1];
     }
 
     public void calcularDataExpiracao() {
@@ -66,12 +71,4 @@ public class PixEntity {
         }
     }
 
-    @Transient
-    public String getDataExpiracaoFormatada() {
-        if (dataExpiracao != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            return dataExpiracao.format(formatter);
-        }
-        return null;
-    }
 }

@@ -24,6 +24,9 @@ public record RequestUserDTO(
         String phone,
 
         @NotBlank
-        String idCrm
+        String idCrm,
+
+        @NotBlank
+        String role
 ) {
 }
