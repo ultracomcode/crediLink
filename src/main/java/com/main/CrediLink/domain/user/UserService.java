@@ -6,7 +6,6 @@ import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.domain.utils.AuthUtils;
 import com.main.CrediLink.exceptions.UserException;
 import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
-import com.main.CrediLink.sippulse.entity.Subscriber;
 import com.main.CrediLink.sippulse.services.SubscriberService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,6 +73,7 @@ public class UserService {
     }
 
     public AccountCodesDTO findAllAccountcode(){
+
         return subscriberService.findAllAccountcode(authUtils.getCurrentUser().getIdCrm());
     }
 
