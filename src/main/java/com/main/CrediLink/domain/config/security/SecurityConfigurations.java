@@ -31,6 +31,7 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/webhook/notify/pix").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pix/create").hasAnyRole("USER")
 
                         .requestMatchers(HttpMethod.GET, "/users/accountcodes").hasAnyRole("USER")
