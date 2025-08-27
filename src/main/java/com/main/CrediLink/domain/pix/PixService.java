@@ -5,16 +5,19 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.main.CrediLink.domain.pix.dto.PixQrCodeResponseDto;
-import com.main.CrediLink.domain.pix.dto.PixRequest;
-import com.main.CrediLink.domain.user.dto.UserDTO;
-import com.main.CrediLink.domain.pix.dto.responsePix.createPixPaymentDTO;
+import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
+import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
+import com.main.CrediLink.domain.token.ItauTokenService;
+import com.main.CrediLink.domain.utils.AuthUtils;
 import com.main.CrediLink.exceptions.PixException;
+import com.main.CrediLink.itau.dto.PixRequest;
+import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
 import com.main.CrediLink.itau.feing.ItauPixClient;
-import com.main.CrediLink.itau.service.ItauTokenService;
 import feign.FeignException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -36,14 +39,16 @@ public class PixService {
     private final ItauPixClient itauPixClient;
     private final ItauTokenService itauTokenService;
     private final PixRepository pixRepository;
+    private final AuthUtils authUtils;
 
-    public PixService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixRepository pixRepository) {
+    public PixService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixRepository pixRepository, AuthUtils authUtils) {
         this.itauPixClient = itauPixClient;
         this.itauTokenService = itauTokenService;
         this.pixRepository = pixRepository;
+        this.authUtils = authUtils;
     }
 
-    public PixQrCodeResponseDto createPixPayment(UserDTO userDTO) {
+    public ResponsePixDto createPixPayment(RequestPixDTO userDTO) {
         try {
 
 
@@ -80,7 +85,7 @@ public class PixService {
         }
     }
 
-    private PixQrCodeResponseDto save(createPixPaymentDTO dto, UserDTO userDTO) {
+    private ResponsePixDto save(createPixPaymentDTO dto, RequestPixDTO userDTO) {
 
         PixEntity entity = buildPixEntity(dto, userDTO);
 
@@ -89,7 +94,7 @@ public class PixService {
 
         pixRepository.save(entity);
 
-        return PixQrCodeResponseDto.fromEntity(entity);
+        return ResponsePixDto.fromEntity(entity);
 
     }
 
@@ -102,16 +107,17 @@ public class PixService {
         return request;
     }
 
-    private PixEntity buildPixEntity(createPixPaymentDTO dto, UserDTO userDTO) {
+    private PixEntity buildPixEntity(createPixPaymentDTO dto, RequestPixDTO userDTO) {
         PixEntity entity = new PixEntity();
         BeanUtils.copyProperties(dto, entity);
+
         entity.setCriacao(OffsetDateTime.parse(dto.calendario().criacao()));
         entity.setValor(dto.valor().original());
         entity.setExpiracao(dto.calendario().expiracao());
         entity.calcularDataExpiracao();
-        entity.getDataExpiracaoFormatada();
-        entity.setUsername(userDTO.username());
-        entity.setDomain(userDTO.domain());
+        entity.setAccountcode(userDTO.accountCode());
+        entity.setObservacao(userDTO.obs());
+        entity.setUser(authUtils.getCurrentUser());
 
         return entity;
     }
@@ -163,5 +169,16 @@ public class PixService {
 
     private String getApiKey() {
         return clientId;
+    }
+
+    public Page<ResponsePixDto> listAll(Pageable pageable) {
+
+        if (authUtils.isAdmin()){
+            return pixRepository.findAll(pageable)
+                    .map(ResponsePixDto::fromEntity);
+        }
+
+        return pixRepository.findByUserId(authUtils.getCurrentUser().getId(), pageable)
+                .map(ResponsePixDto::fromEntity);
     }
 }

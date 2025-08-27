@@ -1,4 +1,4 @@
-package com.main.CrediLink.itau.job;
+package com.main.CrediLink.domain.token.job;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;

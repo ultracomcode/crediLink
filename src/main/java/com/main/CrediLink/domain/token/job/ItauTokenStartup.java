@@ -1,10 +1,10 @@
-package com.main.CrediLink.itau.job;
+package com.main.CrediLink.domain.token.job;
 
 
 import com.main.CrediLink.domain.token.TokenEntityItau;
 import com.main.CrediLink.domain.token.TokenItauRepository;
 import com.main.CrediLink.itau.dto.FetchTokenResponse;
-import com.main.CrediLink.itau.service.ItauTokenService;
+import com.main.CrediLink.domain.token.ItauTokenService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

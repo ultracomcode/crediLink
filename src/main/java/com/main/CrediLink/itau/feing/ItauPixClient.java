@@ -1,7 +1,7 @@
 package com.main.CrediLink.itau.feing;
 
-import com.main.CrediLink.domain.pix.dto.PixRequest;
-import com.main.CrediLink.domain.pix.dto.responsePix.createPixPaymentDTO;
+import com.main.CrediLink.itau.dto.PixRequest;
+import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

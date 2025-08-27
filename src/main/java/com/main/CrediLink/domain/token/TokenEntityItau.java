@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.time.Instant;
 
 @Entity
@@ -15,6 +16,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenEntityItau {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Long id = 1L;
 

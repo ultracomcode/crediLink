@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - private_net
+
+  springboot:
+    build: ./
+    container_name: spring_app
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - private_net
+      - public_net
+volumes:
+  postgres_data:
+
+networks:
+  private_net:
+    internal: true   # só containers dessa rede conseguem se falar
+  public_net:
+    external: false  # rede visível externamente (exposição de portas)
