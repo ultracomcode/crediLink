@@ -1,5 +1,7 @@
 package com.main.CrediLink.domain.config.security;
 
+import com.main.CrediLink.domain.config.security.exeptions.CustomAccessDeniedHandler;
+import com.main.CrediLink.domain.config.security.exeptions.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,8 +32,11 @@ public class SecurityConfigurations {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/webhook/notify/pix").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/pix/create").hasAnyRole("USER")
 
                         .requestMatchers(HttpMethod.GET, "/users/accountcodes").hasAnyRole("USER")
@@ -39,6 +44,10 @@ public class SecurityConfigurations {
 
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 401
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())           // 403
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

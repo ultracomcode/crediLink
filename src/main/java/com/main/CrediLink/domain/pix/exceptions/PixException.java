@@ -1,4 +1,4 @@
-package com.main.CrediLink.exceptions;
+package com.main.CrediLink.domain.pix.exceptions;
 
 public class PixException extends RuntimeException {
     public PixException(String message) {

@@ -3,8 +3,8 @@ package com.main.CrediLink.domain.user;
 import com.main.CrediLink.domain.user.dto.RequestUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseSaveUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
+import com.main.CrediLink.domain.user.exceptions.UserException;
 import com.main.CrediLink.domain.utils.AuthUtils;
-import com.main.CrediLink.exceptions.UserException;
 import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
 import com.main.CrediLink.sippulse.services.SubscriberService;
 import jakarta.transaction.Transactional;
@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -48,8 +47,7 @@ public class UserService {
         userRepository.save(userEntity);
 
         return new ResponseSaveUserDTO(
-                "Usuário cadastrado com sucesso!",
-                LocalDateTime.now().toString()
+                "Usuário cadastrado com sucesso!"
         );
     }
 

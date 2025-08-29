@@ -9,7 +9,7 @@ import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.token.ItauTokenService;
 import com.main.CrediLink.domain.utils.AuthUtils;
-import com.main.CrediLink.exceptions.PixException;
+import com.main.CrediLink.domain.pix.exceptions.PixException;
 import com.main.CrediLink.itau.dto.PixRequest;
 import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
 import com.main.CrediLink.itau.feing.ItauPixClient;

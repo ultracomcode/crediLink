@@ -1,4 +1,4 @@
-package com.main.CrediLink.exceptions;
+package com.main.CrediLink.domain.user.exceptions;
 
 public class UserException extends RuntimeException {
     public UserException(String message) {
