@@ -78,7 +78,14 @@
             <version>13.5</version>
         </dependency>
 
-		<!-- ADICIONAIS NECESSÁRIAS - Geração de QR Code -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>13.6</version> <!-- use a mesma versão do feign que você tem -->
+        </dependency>
+
+
+        <!-- ADICIONAIS NECESSÁRIAS - Geração de QR Code -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
@@ -114,6 +121,7 @@
 			<artifactId>bcpkix-jdk18on</artifactId>
 			<version>1.81</version>
 		</dependency>
+
 
 		<!-- ADICIONAIS NECESSÁRIAS - Processamento assíncrono -->
 		<dependency>
