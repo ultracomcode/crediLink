@@ -4,7 +4,7 @@ import com.main.CrediLink.domain.user.dto.RequestUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseSaveUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.domain.user.exceptions.UserException;
-import com.main.CrediLink.domain.utils.AuthUtils;
+import com.main.CrediLink.domain.utils.CurrentUserService;
 import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
 import com.main.CrediLink.sippulse.services.SubscriberService;
 import jakarta.transaction.Transactional;
@@ -22,12 +22,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final SubscriberService subscriberService;
-    private final AuthUtils authUtils;
+    private final CurrentUserService currentUserService;
 
-    public UserService(UserRepository userRepository, SubscriberService subscriberService, AuthUtils authUtils) {
+    public UserService(UserRepository userRepository, SubscriberService subscriberService, CurrentUserService currentUserService) {
         this.userRepository = userRepository;
         this.subscriberService = subscriberService;
-        this.authUtils = authUtils;
+        this.currentUserService = currentUserService;
     }
 
     @Transactional
@@ -72,7 +72,7 @@ public class UserService {
 
     public AccountCodesDTO findAllAccountcode(){
 
-        return subscriberService.findAllAccountcode(authUtils.getCurrentUser().getIdCrm());
+        return subscriberService.findAllAccountcode(currentUserService.getCurrentUser().getIdCrm());
     }
 
     private String cryptPassword(String password){
