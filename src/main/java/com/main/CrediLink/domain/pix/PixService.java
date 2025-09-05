@@ -8,7 +8,7 @@ import com.google.zxing.common.BitMatrix;
 import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.token.ItauTokenService;
-import com.main.CrediLink.domain.utils.AuthUtils;
+import com.main.CrediLink.domain.utils.CurrentUserService;
 import com.main.CrediLink.domain.pix.exceptions.PixException;
 import com.main.CrediLink.itau.dto.PixRequest;
 import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
@@ -39,13 +39,13 @@ public class PixService {
     private final ItauPixClient itauPixClient;
     private final ItauTokenService itauTokenService;
     private final PixRepository pixRepository;
-    private final AuthUtils authUtils;
+    private final CurrentUserService currentUserService;
 
-    public PixService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixRepository pixRepository, AuthUtils authUtils) {
+    public PixService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixRepository pixRepository, CurrentUserService currentUserService) {
         this.itauPixClient = itauPixClient;
         this.itauTokenService = itauTokenService;
         this.pixRepository = pixRepository;
-        this.authUtils = authUtils;
+        this.currentUserService = currentUserService;
     }
 
     public ResponsePixDto createPixPayment(RequestPixDTO userDTO) {
@@ -117,7 +117,7 @@ public class PixService {
         entity.calcularDataExpiracao();
         entity.setAccountcode(userDTO.accountCode());
         entity.setObservacao(userDTO.obs());
-        entity.setUser(authUtils.getCurrentUser());
+        entity.setUser(currentUserService.getCurrentUser());
 
         return entity;
     }
@@ -173,12 +173,12 @@ public class PixService {
 
     public Page<ResponsePixDto> listAll(Pageable pageable) {
 
-        if (authUtils.isAdmin()){
+        if (currentUserService.isAdmin()){
             return pixRepository.findAll(pageable)
                     .map(ResponsePixDto::fromEntity);
         }
 
-        return pixRepository.findByUserId(authUtils.getCurrentUser().getId(), pageable)
+        return pixRepository.findByUserId(currentUserService.getCurrentUser().getId(), pageable)
                 .map(ResponsePixDto::fromEntity);
     }
 }
