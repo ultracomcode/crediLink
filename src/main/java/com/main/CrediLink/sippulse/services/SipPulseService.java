@@ -1,6 +1,5 @@
 package com.main.CrediLink.sippulse.services;
 
-import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.exceptions.SoapIntegrationException;
 import com.main.CrediLink.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.sippulse.wsdlSippulse.SipPulse;
