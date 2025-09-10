@@ -32,7 +32,7 @@ public class MeuFeignConfig {
     public Decoder feignDecoder() {
         return new JacksonDecoder() {
             @Override
-            public Object decode(Response response, java.lang.reflect.Type type) throws IOException {
+            public Object decode(Response response, Type type) throws IOException {
                 Collection<String> contentTypeCollection = response.headers()
                         .getOrDefault("Content-Type", Collections.emptyList());
 
