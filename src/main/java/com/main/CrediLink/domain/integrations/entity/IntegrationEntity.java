@@ -1,5 +1,6 @@
 package com.main.CrediLink.domain.integrations.entity;
 
+import com.main.CrediLink.domain.integrations.enums.IntegrationStatus;
 import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Integration {
+public class IntegrationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,9 @@ public class Integration {
 
     @Column(name = "token_api")
     private String tokenApi;
+
+    @Column(name = "url_api")
+    private String urlApi;
 
     @Column(name = "username")
     private String username;
@@ -39,12 +43,15 @@ public class Integration {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
-    private IntegrationsType tipo;
+    private IntegrationsType type;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private IntegrationStatus status;
 
-
-
+    @PrePersist
+    public void setCreationDate() {
+        this.status = IntegrationStatus.ACTIVE;
+    }
 
 }

@@ -20,6 +20,7 @@ public class InvoiceService {
 
     private final FeingClientIxc feingClientIxc;
 
+
     public InvoiceService(FeingClientIxc feingClientIxc) {
         this.feingClientIxc = feingClientIxc;
     }
