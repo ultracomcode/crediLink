@@ -24,13 +24,14 @@ public class MeuFeignConfig {
     @Bean
     public RequestInterceptor basicAuthRequestInterceptor() {
         return requestTemplate -> {
-            String username = "108";
-            String password = "78f77d79a8f711c036ac9cdf9bbff5f6348e4bea9a13f837c7fe1ff011ab9505";
+            integrationService.findByType(IntegrationsType.IXC).ifPresent(integration -> {
 
-            String auth = username + ":" + password;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+                String auth = integration.getTokenApi();
 
-            requestTemplate.header("Authorization", "Basic " + encodedAuth);
+                String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+
+                requestTemplate.header("Authorization", "Basic " + encodedAuth);
+            });
         };
     }
 
