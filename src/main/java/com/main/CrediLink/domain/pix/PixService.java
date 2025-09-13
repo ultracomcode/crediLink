@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.Base64;
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PixService {
@@ -58,7 +55,6 @@ public class PixService {
 
             createPixPaymentDTO dto = itauPixClient.gerarPix(
                     getAuthHeader(),
-                    getApiKey(),
                     getCorrelationIdHeader(),
                     getFlowIdHeader(),
                     request
@@ -164,11 +160,7 @@ public class PixService {
     }
 
     private String getCorrelationIdHeader() {
-        return "2";
-    }
-
-    private String getApiKey() {
-        return clientId;
+        return UUID.randomUUID().toString();
     }
 
     public Page<ResponsePixDto> listAll(Pageable pageable) {
