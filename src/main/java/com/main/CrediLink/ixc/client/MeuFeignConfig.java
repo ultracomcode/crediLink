@@ -1,12 +1,12 @@
 package com.main.CrediLink.ixc.client;
 
+import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
+import com.main.CrediLink.domain.integrations.service.IntegrationService;
 import feign.RequestInterceptor;
 import feign.Response;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
