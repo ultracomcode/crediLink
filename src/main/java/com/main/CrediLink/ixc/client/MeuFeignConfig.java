@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@Configuration
+
 public class MeuFeignConfig {
 
     private final IntegrationService integrationService;
