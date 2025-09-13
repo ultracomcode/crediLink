@@ -15,6 +15,12 @@ import java.util.*;
 @Configuration
 public class MeuFeignConfig {
 
+    private final IntegrationService integrationService;
+
+    public MeuFeignConfig(IntegrationService integrationService) {
+        this.integrationService = integrationService;
+    }
+
     @Bean
     public RequestInterceptor basicAuthRequestInterceptor() {
         return requestTemplate -> {
