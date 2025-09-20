@@ -4,6 +4,7 @@ package com.main.CrediLink.domain.integrations.controller;
 import com.main.CrediLink.domain.integrations.dto.IntegrationRequest;
 import com.main.CrediLink.domain.integrations.entity.IntegrationEntity;
 import com.main.CrediLink.domain.integrations.service.IntegrationService;
+import com.main.CrediLink.ixc.dto.ResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class IntegrationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<IntegrationEntity> save(@RequestBody @Valid IntegrationRequest request){
+    public ResponseEntity<ResponseDTO> save(@RequestBody @Valid IntegrationRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(integrationService.save(request));
     }
 }

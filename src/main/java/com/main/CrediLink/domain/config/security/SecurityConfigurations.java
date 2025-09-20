@@ -1,7 +1,5 @@
 package com.main.CrediLink.domain.config.security;
 
-import com.main.CrediLink.domain.config.security.exeptions.CustomAccessDeniedHandler;
-import com.main.CrediLink.domain.config.security.exeptions.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,10 +42,6 @@ public class SecurityConfigurations {
 
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 401
-                        .accessDeniedHandler(new CustomAccessDeniedHandler())           // 403
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

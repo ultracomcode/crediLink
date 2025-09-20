@@ -8,6 +8,7 @@ import com.main.CrediLink.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.sippulse.wsdlSippulse.SipPulse;
 import com.main.CrediLink.sippulse.wsdlSippulse.SubscriberWS;
 import com.main.CrediLink.sippulse.wsdlSippulse.UserPrincipalDTO;
+import com.main.CrediLink.utils.CryptoService;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -19,9 +20,11 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMess
 public class SipPulseService {
 
     private final IntegrationService integrationService;
+    private final CryptoService cryptoService;
 
-    public SipPulseService(IntegrationService integrationService) {
+    public SipPulseService(IntegrationService integrationService, CryptoService cryptoService) {
         this.integrationService = integrationService;
+        this.cryptoService = cryptoService;
     }
 
 
@@ -55,13 +58,16 @@ public class SipPulseService {
 
     private UserPrincipalDTO createUserPrincipal() {
         UserPrincipalDTO userPrincipal = new UserPrincipalDTO();
+
+        var password = cryptoService.decrypt(integration().getPassword());
+
         userPrincipal.setLogin(integration().getUsername());
         userPrincipal.setPassword(integration().getPassword());
         return userPrincipal;
     }
     
     private IntegrationEntity integration(){
-        return integrationService.findByType(IntegrationsType.SIPPULSE).orElseThrow(
+        return integrationService.findByTypeAndStatus(IntegrationsType.SIPPULSE).orElseThrow(
                 () -> new RuntimeException("IntegrationEntity configuration for SIPPULSE not found")
         );
     };

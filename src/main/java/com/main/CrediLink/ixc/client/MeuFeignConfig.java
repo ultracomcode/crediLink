@@ -24,7 +24,7 @@ public class MeuFeignConfig {
     @Bean
     public RequestInterceptor basicAuthRequestInterceptor() {
         return requestTemplate -> {
-            integrationService.findByType(IntegrationsType.IXC).ifPresent(integration -> {
+            integrationService.findByTypeAndStatus(IntegrationsType.IXC).ifPresent(integration -> {
 
                 String auth = integration.getTokenApi();
 
