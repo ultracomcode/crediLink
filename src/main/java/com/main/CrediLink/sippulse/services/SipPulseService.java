@@ -59,10 +59,11 @@ public class SipPulseService {
     private UserPrincipalDTO createUserPrincipal() {
         UserPrincipalDTO userPrincipal = new UserPrincipalDTO();
 
+        var login = integration().getUsername();
         var password = cryptoService.decrypt(integration().getPassword());
 
-        userPrincipal.setLogin(integration().getUsername());
-        userPrincipal.setPassword(integration().getPassword());
+        userPrincipal.setLogin(login);
+        userPrincipal.setPassword(password);
         return userPrincipal;
     }
     

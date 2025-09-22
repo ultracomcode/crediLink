@@ -10,7 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.http.MediaType;
 
 @FeignClient(name = "itauTokenClient",
-        url = "${itau.api.access-token}",
+        url = "${itau.api-url-access-token}",
         configuration = CertificateConfig.class)
 public interface ItauTokenClient {
 

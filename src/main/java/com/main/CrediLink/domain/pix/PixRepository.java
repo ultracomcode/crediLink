@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PixRepository extends JpaRepository<PixEntity, Long> {
-    Optional<PixEntity> findByTxid(String txid);
+public interface PixRepository extends JpaRepository<PixTransactionEntity, Long> {
+    Optional<PixTransactionEntity> findByTxid(String txid);
 
-    Page<PixEntity> findByUserId(Long userId, Pageable pageable);
+    Page<PixTransactionEntity> findByUserId(Long userId, Pageable pageable);
 }

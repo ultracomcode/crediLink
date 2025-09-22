@@ -1,6 +1,6 @@
 package com.main.CrediLink.sippulse.dto;
 
-import com.main.CrediLink.domain.pix.PixEntity;
+import com.main.CrediLink.domain.pix.PixTransactionEntity;
 
 public record AddCreditDTO(
         String username,
@@ -8,12 +8,12 @@ public record AddCreditDTO(
         String value,
         String obs
 ) {
-    public static AddCreditDTO fromEntity(PixEntity pixEntity){
+    public static AddCreditDTO fromEntity(PixTransactionEntity pixTransactionEntity){
         return new AddCreditDTO(
-                pixEntity.getUsername(),
-                pixEntity.getDomain(),
-                pixEntity.getValor(),
-                pixEntity.getObservacao()
+                pixTransactionEntity.getUsername(),
+                pixTransactionEntity.getDomain(),
+                pixTransactionEntity.getValor(),
+                pixTransactionEntity.getObservacao()
         );
     }
 }

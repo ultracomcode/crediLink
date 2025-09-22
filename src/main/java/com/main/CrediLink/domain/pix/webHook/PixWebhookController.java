@@ -25,9 +25,6 @@ public class PixWebhookController {
     @PostMapping("/pix")
     public ResponseEntity<Void> receivePixNotification(@RequestBody Map<String, List<PixNotificacaoDTO>> payload) {
 
-        log.info("Pix Webhook Received");
-        log.info(payload.toString());
-        log.info("---------------------------");
         List<PixNotificacaoDTO> pixList = payload.get("pix");
 
         pixWebhookService.CheckWebhookNotifications(pixList);
