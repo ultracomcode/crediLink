@@ -6,7 +6,7 @@ import com.main.CrediLink.domain.integrations.entity.IntegrationEntity;
 import com.main.CrediLink.domain.integrations.enums.IntegrationStatus;
 import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
 import com.main.CrediLink.domain.integrations.repository.IntegrationRepository;
-import com.main.CrediLink.ixc.dto.ResponseDTO;
+import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.utils.CryptoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

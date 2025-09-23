@@ -1,6 +1,7 @@
 package com.main.CrediLink.domain.pix;
 
 import com.main.CrediLink.domain.user.UserEntity;
+import com.main.CrediLink.enuns.PixStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,8 @@ public class PixTransactionEntity {
     @Column(name = "created_at")
     private OffsetDateTime criacao;
 
+    private OffsetDateTime payment_at;
+
     @Column(name = "expiration_seconds")
     private String expiracao;
 
@@ -32,7 +35,8 @@ public class PixTransactionEntity {
     private OffsetDateTime dataExpiracao;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PixStatus status;
 
     @Column(name = "txid")
     private String txid;

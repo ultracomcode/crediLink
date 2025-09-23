@@ -1,4 +1,4 @@
-package com.main.CrediLink.ixc.dto;
+package com.main.CrediLink.dtos;
 
 public record ResponseDTO(
         String type,

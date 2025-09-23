@@ -1,7 +1,7 @@
 package com.main.CrediLink.ixc.client;
 
 import com.main.CrediLink.ixc.dto.generate_finacial.GenerateFinancialRequest;
-import com.main.CrediLink.ixc.dto.ResponseDTO;
+import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.ixc.dto.additional_service.ResponseServiceAdditional;
 import com.main.CrediLink.ixc.dto.additional_service.RequestAdditionalService;
 import com.main.CrediLink.ixc.dto.IxcResponseDTO;

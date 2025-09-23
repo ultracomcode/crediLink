@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PixRepository extends JpaRepository<PixTransactionEntity, Long> {
+public interface PixTransactionRepository extends JpaRepository<PixTransactionEntity, Long> {
     Optional<PixTransactionEntity> findByTxid(String txid);
 
     Page<PixTransactionEntity> findByUserId(Long userId, Pageable pageable);
