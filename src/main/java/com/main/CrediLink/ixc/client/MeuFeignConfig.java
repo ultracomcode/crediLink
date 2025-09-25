@@ -1,5 +1,6 @@
 package com.main.CrediLink.ixc.client;
 
+import com.main.CrediLink.domain.integrations.entity.IntegrationEntity;
 import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
 import com.main.CrediLink.domain.integrations.service.IntegrationService;
 import feign.RequestInterceptor;
@@ -24,16 +25,16 @@ public class MeuFeignConfig {
     @Bean
     public RequestInterceptor basicAuthRequestInterceptor() {
         return requestTemplate -> {
-            integrationService.findByTypeAndStatus(IntegrationsType.IXC).ifPresent(integration -> {
+            IntegrationEntity integration = integrationService.findByTypeAndStatus(IntegrationsType.IXC);
 
-                String auth = integration.getTokenApi();
+            String auth = integration.getTokenApi();
+            String encodedAuth = Base64.getEncoder()
+                    .encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
-                String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-
-                requestTemplate.header("Authorization", "Basic " + encodedAuth);
-            });
+            requestTemplate.header("Authorization", "Basic " + encodedAuth);
         };
     }
+
 
     @Bean
     public Decoder feignDecoder() {
@@ -43,7 +44,6 @@ public class MeuFeignConfig {
                 Collection<String> contentTypeCollection = response.headers()
                         .getOrDefault("Content-Type", Collections.emptyList());
 
-                // Converte Collection<String> para List<String>
                 List<String> contentType = new ArrayList<>(contentTypeCollection);
 
                 if (contentType.stream().anyMatch(ct -> ct.contains("text/x-json"))) {

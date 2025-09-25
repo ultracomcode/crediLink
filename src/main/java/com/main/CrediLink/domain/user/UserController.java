@@ -1,14 +1,15 @@
 package com.main.CrediLink.domain.user;
 
 import com.main.CrediLink.domain.user.dto.RequestUserDTO;
-import com.main.CrediLink.domain.user.dto.ResponseSaveUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
-import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
+import com.main.CrediLink.dtos.ResponseDTO;
+import com.main.CrediLink.sippulse.dto.AccountCreditsDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/users/accountcodes")
-    public ResponseEntity<AccountCodesDTO> findAllAccountcode(){
+    public ResponseEntity<AccountCreditsDTO> findAllAccountcode(){
         return ResponseEntity.ok(userService.findAllAccountcode());
     }
 
@@ -42,7 +43,9 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public ResponseEntity<ResponseSaveUserDTO> save(@RequestBody @Valid RequestUserDTO requestUserDTO){
-        return ResponseEntity.ok(userService.save(requestUserDTO));
+    public ResponseEntity<ResponseDTO> save(@RequestBody @Valid RequestUserDTO requestUserDTO){
+        return ResponseEntity.
+                status(HttpStatus.CREATED)
+                .body(userService.save(requestUserDTO));
     }
 }

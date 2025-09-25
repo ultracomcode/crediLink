@@ -38,7 +38,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/pix/create").hasAnyRole("USER")
 
                         .requestMatchers(HttpMethod.GET, "/users/accountcodes").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/pix/solicitacoes").hasAnyRole( "USER")
+                        .requestMatchers(HttpMethod.GET, "/pix").hasAnyRole( "USER")
 
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

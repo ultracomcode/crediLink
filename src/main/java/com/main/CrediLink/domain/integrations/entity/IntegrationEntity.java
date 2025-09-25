@@ -41,6 +41,9 @@ public class IntegrationEntity {
     @Column(name = "id_conta_contabil")
     private String idContaContabil;
 
+    @Column(name = "id_produto")
+    private String idPproduto;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private IntegrationsType type;

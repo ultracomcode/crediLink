@@ -1,8 +1,8 @@
-package com.main.CrediLink.itau.feing;
+package com.main.CrediLink.domain.bancos.itau.feing;
 
-import com.main.CrediLink.itau.config.CertificateConfig;
-import com.main.CrediLink.itau.dto.PixRequest;
-import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
+import com.main.CrediLink.domain.bancos.dtos.PixPaymentRequest;
+import com.main.CrediLink.domain.bancos.itau.config.CertificateConfig;
+import com.main.CrediLink.domain.bancos.dtos.PixPaymentResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
         name = "itauPixClient",
         url = "${itau.api.base-url}",
         configuration = CertificateConfig.class)
-public interface ItauPixClient {
+public interface FeingPixRequest {
 
     @PostMapping(value = "/pix_recebimentos/v2/cob",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    createPixPaymentDTO gerarPix(
+    PixPaymentResponse createCharge(
             @RequestHeader("Authorization") String authorization,
             @RequestHeader("x-itau-correlationID") String correlationId,
             @RequestHeader("x-itau-flowID") String flowId,
-            @RequestBody PixRequest pixRequest
+            @RequestBody PixPaymentRequest pixRequest
     );
 }

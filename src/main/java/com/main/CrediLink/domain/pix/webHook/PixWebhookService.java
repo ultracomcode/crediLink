@@ -3,13 +3,13 @@ package com.main.CrediLink.domain.pix.webHook;
 import com.main.CrediLink.domain.pix.PixTransactionRepository;
 import com.main.CrediLink.domain.pix.webHook.dto.PixNotificacaoDTO;
 import com.main.CrediLink.enuns.PixStatus;
+import com.main.CrediLink.ixc.service.InvoiceService;
 import com.main.CrediLink.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.sippulse.services.SipPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -17,10 +17,12 @@ public class PixWebhookService {
     private static final Logger log = LoggerFactory.getLogger(PixWebhookService.class);
     private final PixTransactionRepository pixTransactionRepository;
     private final SipPulseService sipPulseService;
+    private final InvoiceService invoiceService;
 
-    public PixWebhookService(PixTransactionRepository pixTransactionRepository, SipPulseService sipPulseService) {
+    public PixWebhookService(PixTransactionRepository pixTransactionRepository, SipPulseService sipPulseService, InvoiceService invoiceService) {
         this.pixTransactionRepository = pixTransactionRepository;
         this.sipPulseService = sipPulseService;
+        this.invoiceService = invoiceService;
     }
 
     public void CheckWebhookNotifications(List<PixNotificacaoDTO> pixList) {
@@ -32,19 +34,18 @@ public class PixWebhookService {
 
                 if(entity.getStatus().equals(PixStatus.AT)) {
 
+                    entity.setPaymentAtFromIsoZ(notify.horario());
+
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
 
+                    invoiceService.btnGenerateFinancial(entity);
+
                     entity.setStatus(PixStatus.CO);
-                    entity.setPayment_at(parseHorario(notify.horario()));
 
                     pixTransactionRepository.save(entity);
                 }
             });
 
         } );
-    }
-
-    public OffsetDateTime parseHorario(String horario) {
-        return OffsetDateTime.parse(horario);
     }
 }

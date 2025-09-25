@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
         url = "${ixc.api.base-url}",
         configuration = MeuFeignConfig.class
 )
-public interface FeingClientIxc {
+public interface FeingClientIxc{
 
     @PostMapping(path = "/cliente_contrato_servicos",
             consumes = MediaType.APPLICATION_JSON_VALUE)

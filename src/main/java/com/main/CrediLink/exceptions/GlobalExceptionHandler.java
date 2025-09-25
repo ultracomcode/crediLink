@@ -1,5 +1,7 @@
 package com.main.CrediLink.exceptions;
 
+import com.main.CrediLink.domain.user.exceptions.UserException;
+import com.main.CrediLink.dtos.ResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -106,6 +108,14 @@ public class GlobalExceptionHandler {
         body.put("data", errorDetails);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<Object> handleUserNotFound(UserException ex) {
+        return new ResponseEntity<>(new ResponseDTO(
+                "error",
+                ex.getMessage()
+        ), HttpStatus.NOT_FOUND);
     }
 
 }

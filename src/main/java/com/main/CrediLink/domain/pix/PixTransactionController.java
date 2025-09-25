@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class PixTransactionController {
 
     private final PixTransactionService pixTransactionService;
-    private final InvoiceService invoiceService;
 
-    public PixTransactionController(PixTransactionService pixTransactionService, InvoiceService invoiceService) {
+    public PixTransactionController(PixTransactionService pixTransactionService) {
         this.pixTransactionService = pixTransactionService;
-        this.invoiceService = invoiceService;
     }
 
     @GetMapping("/pix")

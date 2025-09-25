@@ -25,7 +25,7 @@ public class IntegrationService {
 
     public ResponseDTO save(IntegrationRequest dto){
 
-        if (findByTypeAndStatus(IntegrationsType.valueOf(dto.type().toUpperCase())).isPresent()){
+        if (findByTypeAndStatus(IntegrationsType.valueOf(dto.type().toUpperCase())) != null){
             return new ResponseDTO("erro","Já existe uma integração cadastrada para esse tipo");
         };
 
@@ -36,7 +36,7 @@ public class IntegrationService {
 
         entity.setType(IntegrationsType.valueOf(dto.type().toUpperCase()));
 
-        if(!dto.password().isEmpty()){
+        if(dto.type().equals("SIPPULSE") && !dto.password().isEmpty()  ){
             entity.setPassword(cryptoService.encrypt(dto.password()));
         }
 
@@ -45,8 +45,9 @@ public class IntegrationService {
         return new ResponseDTO("success","Integraçao cadastrada com sucesso");
     }
 
-    public Optional<IntegrationEntity> findByTypeAndStatus(IntegrationsType type) {
-        return integrationRepository.findByTypeAndStatus(type, IntegrationStatus.ACTIVE);
+    public IntegrationEntity findByTypeAndStatus(IntegrationsType type) {
+        return integrationRepository.findByTypeAndStatus(type, IntegrationStatus.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("IntegrationEntity configuration for " + type + " not found"));
     }
 
 }

@@ -68,8 +68,6 @@ public class SipPulseService {
     }
     
     private IntegrationEntity integration(){
-        return integrationService.findByTypeAndStatus(IntegrationsType.SIPPULSE).orElseThrow(
-                () -> new RuntimeException("IntegrationEntity configuration for SIPPULSE not found")
-        );
+        return integrationService.findByTypeAndStatus(IntegrationsType.SIPPULSE);
     };
 }

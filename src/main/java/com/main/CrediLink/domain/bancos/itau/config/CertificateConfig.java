@@ -1,6 +1,7 @@
-package com.main.CrediLink.itau.config;
+package com.main.CrediLink.domain.bancos.itau.config;
 
 import feign.Client;
+import feign.Logger;
 import feign.httpclient.ApacheHttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -47,5 +48,10 @@ public class CertificateConfig {
     @Bean
     public Client feignClient(CloseableHttpClient httpClient) {
         return new ApacheHttpClient(httpClient);
+    }
+
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL; // log completo: headers, body, status
     }
 }

@@ -1,6 +1,5 @@
 package com.main.CrediLink.sippulse.repository;
 
-import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
 import com.main.CrediLink.sippulse.entity.Subscriber;
 import com.main.CrediLink.sippulse.utils.ReadOnlyRepository;
 import org.springframework.data.jpa.repository.Query;

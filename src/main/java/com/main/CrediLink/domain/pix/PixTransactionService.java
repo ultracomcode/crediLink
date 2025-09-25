@@ -1,15 +1,15 @@
 package com.main.CrediLink.domain.pix;
 
+import com.main.CrediLink.domain.bancos.dtos.PixPaymentRequest;
+import com.main.CrediLink.domain.bancos.dtos.PixPaymentResponse;
+import com.main.CrediLink.domain.bancos.itau.feing.FeingPixRequest;
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
 import com.main.CrediLink.domain.pix.exceptions.PixException;
-import com.main.CrediLink.domain.token.ItauTokenService;
+import com.main.CrediLink.domain.bancos.itau.service.ItauService;
 import com.main.CrediLink.domain.utils.CurrentUserService;
 import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.enuns.PixStatus;
-import com.main.CrediLink.itau.dto.PixRequest;
-import com.main.CrediLink.itau.dto.responsePix.createPixPaymentDTO;
-import com.main.CrediLink.itau.feing.ItauPixClient;
 import feign.FeignException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -27,14 +26,12 @@ public class PixTransactionService {
     @Value("${itau.chave.pix}")
     private String chavePix;
 
-    private final ItauPixClient itauPixClient;
-    private final ItauTokenService itauTokenService;
+    private final ItauService itauService;
     private final PixTransactionRepository pixTransactionRepository;
     private final CurrentUserService currentUserService;
 
-    public PixTransactionService(ItauPixClient itauPixClient, ItauTokenService itauTokenService, PixTransactionRepository pixTransactionRepository, CurrentUserService currentUserService) {
-        this.itauPixClient = itauPixClient;
-        this.itauTokenService = itauTokenService;
+    public PixTransactionService(ItauService itauService, PixTransactionRepository pixTransactionRepository, CurrentUserService currentUserService) {
+        this.itauService = itauService;
         this.pixTransactionRepository = pixTransactionRepository;
         this.currentUserService = currentUserService;
     }
@@ -43,12 +40,7 @@ public class PixTransactionService {
         try {
             var request = buildPixRequest(requestPixDTO.value());
 
-            createPixPaymentDTO createdPixPayment = itauPixClient.gerarPix(
-                    getAuthHeader(),
-                    getCorrelationIdHeader(),
-                    getFlowIdHeader(),
-                    request
-            );
+            var createdPixPayment = itauService.createCharge(request);
 
             return save(createdPixPayment, requestPixDTO);
 
@@ -65,7 +57,7 @@ public class PixTransactionService {
         }
     }
 
-    private ResponseDTO save(createPixPaymentDTO dto, RequestPixDTO userDTO) {
+    private ResponseDTO save(PixPaymentResponse dto, RequestPixDTO userDTO) {
 
         PixTransactionEntity entity = buildPixTransactionEntity(dto, userDTO);
 
@@ -75,19 +67,18 @@ public class PixTransactionService {
 
     }
 
-    private PixRequest buildPixRequest(String valor) {
+    private PixPaymentRequest buildPixRequest(String valor) {
 
-        PixRequest request = new PixRequest();
+        PixPaymentRequest request = new PixPaymentRequest(
+                new PixPaymentRequest.Calendario(60),
+                new PixPaymentRequest.Valor(validateAndFormatAmount(valor)),
+                chavePix
+        );
 
-        var value = new PixRequest.Valor();
-
-        value.setOriginal(validateAndFormatAmount(valor));
-        request.setValor(value);
-        request.setChave(chavePix);
         return request;
     }
 
-    private PixTransactionEntity buildPixTransactionEntity(createPixPaymentDTO dto, RequestPixDTO userDTO) {
+    private PixTransactionEntity buildPixTransactionEntity(PixPaymentResponse dto, RequestPixDTO userDTO) {
 
         PixTransactionEntity entity = new PixTransactionEntity();
         BeanUtils.copyProperties(dto, entity);
@@ -96,13 +87,17 @@ public class PixTransactionService {
             entity.setStatus(PixStatus.AT);
         }
 
-        entity.setCriacao(OffsetDateTime.parse(dto.calendario().criacao()));
+        if (userDTO.obs() == null && userDTO.obs().isEmpty()) {
+            entity.setObservacao("Recarga Telefonia Via Api");
+        }
+
+        entity.setCriacaoFromIsoZ(dto.calendario().criacao());
         entity.setValor(dto.valor().original());
         entity.setExpiracao(dto.calendario().expiracao());
         entity.calculateExpirationDate();
         entity.setAccountcode(userDTO.accountCode());
-        entity.setObservacao(userDTO.obs());
         entity.setUser(currentUserService.getCurrentUser());
+        entity.setObservacao(userDTO.obs());
 
         return entity;
     }
@@ -123,7 +118,7 @@ public class PixTransactionService {
         return pixTransactionRepository.findByTxid(txid)
                 .map(entity -> {
                     if (!entity.getStatus().canBeCancelled()) {
-                        return new ResponseDTO("error", "Transação já esta cancelada.");
+                        return new ResponseDTO("error", "Transação já esta " + entity.getStatus().getDescription());
                     }
 
                     entity.setStatus(PixStatus.CA);
@@ -132,7 +127,6 @@ public class PixTransactionService {
                 })
                 .orElse(new ResponseDTO("error", "Transação não encontrada"));
     }
-
 
 
     private String validateAndFormatAmount(String valor) {
@@ -153,17 +147,5 @@ public class PixTransactionService {
         }
 
         return String.format(Locale.US, "%.2f", parsed);
-    }
-
-    private String getAuthHeader() {
-        return "Bearer " + itauTokenService.getToken();
-    }
-
-    private String getFlowIdHeader() {
-        return "1";
-    }
-
-    private String getCorrelationIdHeader() {
-        return UUID.randomUUID().toString();
     }
 }

@@ -1,12 +1,16 @@
 package com.main.CrediLink.domain.pix;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.main.CrediLink.domain.user.UserEntity;
 import com.main.CrediLink.enuns.PixStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 
 @Entity
 @Table(name = "pix_transaction")
@@ -24,15 +28,16 @@ public class PixTransactionEntity {
     private Long id;
 
     @Column(name = "created_at")
-    private OffsetDateTime criacao;
+    private LocalDateTime criacao;
 
-    private OffsetDateTime payment_at;
+    @Column(name = "payment_at")
+    private LocalDateTime paymentAt;
 
     @Column(name = "expiration_seconds")
     private String expiracao;
 
     @Column(name = "expiration_date")
-    private OffsetDateTime dataExpiracao;
+    private LocalDateTime dataExpiracao;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -80,6 +85,24 @@ public class PixTransactionEntity {
         if (criacao != null && expiracao != null && expiracao.matches("\\d+")) {
             long segundos = Long.parseLong(expiracao);
             this.dataExpiracao = criacao.plusSeconds(segundos);
+        }
+    }
+
+    public void setCriacaoFromIsoZ(String isoDateTimeZ) {
+        this.criacao = parseIsoZToLocalDateTime(isoDateTimeZ);
+    }
+
+    public void setPaymentAtFromIsoZ(String isoDateTimeZ) {
+        this.paymentAt = parseIsoZToLocalDateTime(isoDateTimeZ);
+    }
+
+    private LocalDateTime parseIsoZToLocalDateTime(String isoDateTimeZ) {
+        try {
+            return Instant.parse(isoDateTimeZ)
+                    .atZone(ZoneId.of("America/Sao_Paulo"))
+                    .toLocalDateTime();
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato de data/hora inválido: " + isoDateTimeZ, e);
         }
     }
 }

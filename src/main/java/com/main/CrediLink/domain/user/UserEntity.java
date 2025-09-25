@@ -48,6 +48,9 @@ public class UserEntity implements UserDetails {
     @Column(unique = true)
     private String idCrm;
 
+    @Column(unique = true)
+    private String idContrato;
+
     @Enumerated(EnumType.STRING)
     private StatusUser status;
 
