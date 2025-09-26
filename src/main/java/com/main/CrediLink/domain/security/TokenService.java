@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.config.security;
+package com.main.CrediLink.domain.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

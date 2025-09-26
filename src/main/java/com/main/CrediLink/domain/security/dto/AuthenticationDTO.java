@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.config.security.dto;
+package com.main.CrediLink.domain.security.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

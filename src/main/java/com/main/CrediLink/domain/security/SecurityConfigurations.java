@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.config.security;
+package com.main.CrediLink.domain.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

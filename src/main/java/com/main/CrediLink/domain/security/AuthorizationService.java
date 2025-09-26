@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.config.security;
+package com.main.CrediLink.domain.security;
 
 import com.main.CrediLink.domain.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

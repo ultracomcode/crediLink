@@ -1,7 +1,7 @@
-package com.main.CrediLink.domain.config.security;
+package com.main.CrediLink.domain.security;
 
-import com.main.CrediLink.domain.config.security.dto.AuthenticationDTO;
-import com.main.CrediLink.domain.config.security.dto.LoginResponseDTO;
+import com.main.CrediLink.domain.security.dto.AuthenticationDTO;
+import com.main.CrediLink.domain.security.dto.LoginResponseDTO;
 import com.main.CrediLink.domain.user.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -3,7 +3,6 @@ package com.main.CrediLink.domain.pix;
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
 import com.main.CrediLink.dtos.ResponseDTO;
-import com.main.CrediLink.ixc.service.InvoiceService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +37,7 @@ public class PixTransactionController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(pixTransactionService.createPixPayment(dto));
+                .body(pixTransactionService.generatePixRequest(dto));
     }
 
     @DeleteMapping("/pix/delete/{txid}")

@@ -124,10 +124,10 @@
 
 
 		<!-- ADICIONAIS NECESSÁRIAS - Processamento assíncrono -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-quartz</artifactId>-->
+<!--		</dependency>-->
 
 		<!-- JÁ TEM - Dependências de desenvolvimento -->
 		<dependency>
