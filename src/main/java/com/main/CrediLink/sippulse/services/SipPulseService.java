@@ -39,6 +39,7 @@ public class SipPulseService {
     }
 
     public void addCredit(AddCreditDTO addCreditDTO) {
+
         try {
             SubscriberWS port = getSubscriberWSPort();
             UserPrincipalDTO principal = createUserPrincipal();

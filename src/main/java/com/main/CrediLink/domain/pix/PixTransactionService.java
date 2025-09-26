@@ -10,6 +10,7 @@ import com.main.CrediLink.domain.utils.CurrentUserService;
 import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.enuns.PixStatus;
 import com.main.CrediLink.utils.ValidadeValueUtils;
+import feign.FeignException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,21 +33,24 @@ public class PixTransactionService {
     }
 
     public ResponseDTO generatePixRequest(RequestPixDTO requestPixDTO) {
+        validarUsuario();
+
         try {
-            var request = buildPixRequest(requestPixDTO.value());
+            var pixPaymentRequest = buildPixRequest(requestPixDTO.value());
 
-            var createdPixPayment = itauService.createCharge(request);
+            var pixResponse = itauService.createCharge(pixPaymentRequest);
 
-            return save(createdPixPayment, requestPixDTO);
-
-        } catch (Exception e) {
-            throw new PixException("Erro ao criar cobrança Pix", e);
+            return save(pixResponse, requestPixDTO);
+        } catch (FeignException ex) {
+            throw new PixException("Erro na integração com o Itaú", ex);
+        } catch (Exception ex) {
+            throw new PixException("Erro inesperado ao criar cobrança Pix", ex);
         }
     }
 
-    private ResponseDTO save(PixPaymentResponse dto, RequestPixDTO userDTO) {
+    private ResponseDTO save(PixPaymentResponse dto, RequestPixDTO requestPixDTO) {
 
-        PixTransactionEntity entity = buildPixTransactionEntity(dto, userDTO);
+        PixTransactionEntity entity = buildPixTransactionEntity(dto, requestPixDTO);
 
         pixTransactionRepository.save(entity);
 
@@ -117,6 +121,12 @@ public class PixTransactionService {
                     return new ResponseDTO("success", "Pix cancelado com sucesso");
                 })
                 .orElse(new ResponseDTO("error", "Transação não encontrada"));
+    }
+
+    private void validarUsuario() {
+        if (currentUserService.getCurrentUser().isAdmin()) {
+            throw new PixException("Administrador não pode gerar pix");
+        }
     }
 
 }

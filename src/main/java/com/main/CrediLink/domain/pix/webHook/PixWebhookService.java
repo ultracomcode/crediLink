@@ -38,7 +38,8 @@ public class PixWebhookService {
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
 
-                    invoiceService.btnGenerateFinancial(entity);
+                    invoiceService.receiveInvoice(entity);
+
 
                     entity.setStatus(PixStatus.CO);
 

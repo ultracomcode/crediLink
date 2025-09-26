@@ -8,8 +8,8 @@ import com.main.CrediLink.domain.bancos.interfaces.Banco;
 import com.main.CrediLink.domain.bancos.dtos.AccessTokenResponse;
 import com.main.CrediLink.domain.bancos.dtos.PixPaymentRequest;
 import com.main.CrediLink.domain.bancos.dtos.PixPaymentResponse;
-import com.main.CrediLink.domain.bancos.itau.entity.TokenEntityItau;
-import com.main.CrediLink.domain.bancos.itau.repository.TokenItauRepository;
+import com.main.CrediLink.domain.bancos.entity.TokenEntity;
+import com.main.CrediLink.domain.bancos.repository.TokenRepository;
 import com.main.CrediLink.enuns.BankType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class ItauService implements Banco {
 
     private final FeingAccessToken feingAccessToken;
     private final FeingPixRequest feingPixRequest;
-    private final TokenItauRepository tokenRepository;
+    private final TokenRepository tokenRepository;
 
     @Value("${itau.client-id}")
     private String clientId;
@@ -32,14 +32,14 @@ public class ItauService implements Banco {
     @Value("${itau.client-secret}")
     private String clientSecret;
 
-    public ItauService(FeingAccessToken feingAccessToken, FeingPixRequest feingPixRequest, TokenItauRepository tokenRepository) {
+    public ItauService(FeingAccessToken feingAccessToken, FeingPixRequest feingPixRequest, TokenRepository tokenRepository) {
         this.feingAccessToken = feingAccessToken;
         this.feingPixRequest = feingPixRequest;
         this.tokenRepository = tokenRepository;
     }
 
-    public TokenEntityItau getToken() {
-        TokenEntityItau token = tokenRepository.findByBankType(BankType.IT)
+    public TokenEntity getToken() {
+        TokenEntity token = tokenRepository.findByBankType(BankType.IT)
                 .orElse(null);
 
         if (token == null || token.isExpired()){
@@ -51,7 +51,7 @@ public class ItauService implements Banco {
     }
 
     @Override
-    public TokenEntityItau getAccessToken() {
+    public TokenEntity getAccessToken() {
         try {
 
             var accessToken = feingAccessToken.getAccessToken("1",UUID.randomUUID().toString(),buildRequestBody());
@@ -69,8 +69,12 @@ public class ItauService implements Banco {
     public PixPaymentResponse createCharge(PixPaymentRequest pixPaymentRequest) {
 
         try {
+
+            var tokenEntity = getToken();
+            String authorizationHeader = tokenEntity.getTokenType() + " " + tokenEntity.getAccessToken();
+
             var requestPix = feingPixRequest.createCharge(
-                    "Bearer " + getToken().getAccess_token(),
+                    authorizationHeader,
                     UUID.randomUUID().toString(),
                     "1",
                     pixPaymentRequest
@@ -83,8 +87,8 @@ public class ItauService implements Banco {
 
     }
 
-    private TokenEntityItau saveToken(AccessTokenResponse  accessToken) {
-        var tokenEntity = new TokenEntityItau();
+    private TokenEntity saveToken(AccessTokenResponse  accessToken) {
+        var tokenEntity = new TokenEntity();
 
         BeanUtils.copyProperties(accessToken, tokenEntity);
         tokenEntity.setBankType(BankType.IT);

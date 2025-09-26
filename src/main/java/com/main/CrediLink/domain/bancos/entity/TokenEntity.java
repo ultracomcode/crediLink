@@ -1,4 +1,4 @@
-package com.main.CrediLink.domain.bancos.itau.entity;
+package com.main.CrediLink.domain.bancos.entity;
 
 import com.main.CrediLink.enuns.BankType;
 import jakarta.persistence.*;
@@ -16,7 +16,7 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenEntityItau {
+public class TokenEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -25,13 +25,13 @@ public class TokenEntityItau {
     private Long id = 1L;
 
     @Column(name = "access_token", nullable = false, length = 5048)
-    private String access_token;
+    private String accessToken;
 
     @Column(name = "token_type")
-    private String token_type;
+    private String tokenType;
 
     @Column(name = "expires_in")
-    private Long expires_in;
+    private Long expiresIn;
 
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
@@ -44,7 +44,7 @@ public class TokenEntityItau {
     private BankType bankType;
 
     public boolean isExpired() {
-        return expires_in == null || Instant.now().isAfter(Instant.ofEpochSecond(expires_in));
+        return expiresIn == null || Instant.now().isAfter(Instant.ofEpochSecond(expiresIn));
     }
 
     @PrePersist

@@ -3,6 +3,7 @@ package com.main.CrediLink.ixc.service;
 import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
 import com.main.CrediLink.domain.integrations.service.IntegrationService;
 import com.main.CrediLink.domain.pix.PixTransactionEntity;
+import com.main.CrediLink.domain.pix.exceptions.PixException;
 import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.ixc.client.FeingClientIxc;
 import com.main.CrediLink.ixc.dto.IxcMinimalDTO;
@@ -15,6 +16,7 @@ import com.main.CrediLink.ixc.dto.receive_invoice.ReceiveInvoiceRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 @Service
@@ -32,25 +34,41 @@ public class InvoiceService {
     }
 
 
-    public ResponseDTO ReceiveInvoice(PixTransactionEntity pixTransactionEntity){
+    public ResponseDTO receiveInvoice(PixTransactionEntity pixTransactionEntity) {
+        ResponseDTO financialResponse = btnGenerateFinancial(pixTransactionEntity);
 
-        var invoice = getInvoiceBySalesId(btnGenerateFinancial(pixTransactionEntity));
+        if (!"success".equals(financialResponse.type())) {
+            throw new PixException("Não foi possível gerar cobrança financeira: " + financialResponse.message());
+        }
 
-//        var request = new ReceiveInvoiceRequestDTO(
-//                "1",
-//                invoice,
-//
-//
-//        )
+        var invoiceResponse = getInvoiceBySalesId(financialResponse.message());
+        if (invoiceResponse.registros().isEmpty()) {
+            throw new PixException("Nenhum registro encontrado para a venda: " + financialResponse.message());
+        }
 
-//        var response = feingClientIxc.receiveInvoice(request);
-//
-//        return response;
+        var invoice = invoiceResponse.registros().get(0);
 
-        return new ResponseDTO("success","OK");
+        var request = new ReceiveInvoiceRequestDTO(
+                "1",
+                invoice.id(),
+                "7",
+                "1807",
+                "Pix",
+                Optional.ofNullable(pixTransactionEntity.getPaymentAt())
+                        .orElseThrow(() -> new PixException("Data de pagamento não informada"))
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                pixTransactionEntity.getValor(),
+                pixTransactionEntity.getValor(),
+                pixTransactionEntity.getValor(),
+                pixTransactionEntity.getObservacao(),
+                "R"
+        );
+
+        return feingClientIxc.receiveInvoice(request);
     }
 
-    public IxcResponseDTO getInvoiceBySalesId(String idSaida){
+
+    private IxcResponseDTO getInvoiceBySalesId(String idSaida){
         var request = new InvoiceRequestDTO(
                 "fn_areceber.id_saida",
                 idSaida,
@@ -63,29 +81,29 @@ public class InvoiceService {
         return response;
     }
 
-    public String btnGenerateFinancial(PixTransactionEntity pixTransactionEntity){
+    private ResponseDTO btnGenerateFinancial(PixTransactionEntity pixTransactionEntity){
 
-        if (additionalService(pixTransactionEntity).type().equals("success")){
+        additionalService(pixTransactionEntity);
 
-            var request = new GenerateFinancialRequest(
-                    pixTransactionEntity.getUser().getIdContrato(),
-                    pixTransactionEntity.getUser().getIdCrm()
-            );
+        var request = new GenerateFinancialRequest(
+                pixTransactionEntity.getUser().getIdContrato(),
+                pixTransactionEntity.getUser().getIdCrm()
+        );
 
-            var response = feingClientIxc.btnGenerateFinancial(request);
+        var response = feingClientIxc.btnGenerateFinancial(request);
 
-            Matcher idSaida = ID_SAIDA_PATTERN.matcher(response.message());
+        System.out.println(response);
 
-            if(idSaida.find()){
-                return idSaida.group(1);
-            }
-            return response.message();
+        Matcher matcher = ID_SAIDA_PATTERN.matcher(response.message());
+
+        if (matcher.find()) {
+            return new ResponseDTO("success", matcher.group(1));
+        } else {
+            return response;
         }
-
-        return "";
     }
 
-    public ResponseServiceAdditional additionalService(PixTransactionEntity pixTransactionEntity){
+    private ResponseServiceAdditional additionalService(PixTransactionEntity pixTransactionEntity){
 
         var serviceAdditional = new RequestAdditionalService(
                 "T",
@@ -110,7 +128,7 @@ public class InvoiceService {
         return response;
     }
 
-    public IxcResponseDTO getProductsById(String idProduto){
+    private IxcResponseDTO getProductsById(String idProduto){
         var request = new InvoiceRequestDTO(
                 "produtos.id",
                 idProduto,

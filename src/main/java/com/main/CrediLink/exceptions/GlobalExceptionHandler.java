@@ -1,5 +1,6 @@
 package com.main.CrediLink.exceptions;
 
+import com.main.CrediLink.domain.pix.exceptions.PixException;
 import com.main.CrediLink.domain.user.exceptions.UserException;
 import com.main.CrediLink.dtos.ResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -116,6 +117,14 @@ public class GlobalExceptionHandler {
                 "error",
                 ex.getMessage()
         ), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PixException.class)
+    public ResponseEntity<Object> handleUserNotFound(PixException ex) {
+        return new ResponseEntity<>(new ResponseDTO(
+                "error",
+                ex.getMessage()
+        ), HttpStatus.BAD_REQUEST);
     }
 
 }
