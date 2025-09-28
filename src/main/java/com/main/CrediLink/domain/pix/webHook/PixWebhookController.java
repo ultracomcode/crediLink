@@ -27,7 +27,7 @@ public class PixWebhookController {
 
         List<PixNotificacaoDTO> pixList = payload.get("pix");
 
-        pixWebhookService.CheckWebhookNotifications(pixList);
+        pixWebhookService.checkWebhookNotifications(pixList);
 
         return ResponseEntity.ok().build();
     }
