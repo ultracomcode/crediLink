@@ -2,6 +2,7 @@ package com.main.CrediLink.domain.pix;
 
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
+import com.main.CrediLink.domain.pix.dto.ResponsePixSave;
 import com.main.CrediLink.dtos.ResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class PixTransactionController {
     @GetMapping("/pix")
     public ResponseEntity<Page<ResponsePixDto>> listAll(@PageableDefault(
             page = 0,
-            size = 10,
+            size = 5,
             direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -33,7 +34,7 @@ public class PixTransactionController {
     }
 
     @PostMapping("/pix/create")
-    public ResponseEntity<ResponseDTO> createPixPayment(@RequestBody @Valid RequestPixDTO dto) {
+    public ResponseEntity<ResponsePixSave> createPixPayment(@RequestBody @Valid RequestPixDTO dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

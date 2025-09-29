@@ -9,10 +9,16 @@ import java.time.LocalDateTime;
 public record ResponsePixDto(
         Long id,
         String username,
+
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime criacao,
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime vencimento,
+
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime pagamento,
+
         String pixCopiaECola,
         PixStatus status,
         String accountCode,
@@ -25,8 +31,9 @@ public record ResponsePixDto(
                 entity.getId(),
                 entity.getUser().getUsername(),
                 entity.getCriacao(),
+                entity.getDataExpiracao(),
                 entity.getPaymentAt(),
-                entity.getPixCopiaECola(),
+                entity.getStatus() != PixStatus.AT ? null : entity.getPixCopiaECola(),
                 entity.getStatus(),
                 entity.getAccountcode(),
                 entity.getValor(),

@@ -1,6 +1,5 @@
 package com.main.CrediLink.domain.pix;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.main.CrediLink.domain.user.UserEntity;
 import com.main.CrediLink.enuns.PixStatus;
 import jakarta.persistence.*;
@@ -75,11 +74,26 @@ public class PixTransactionEntity {
     private String accountcode;
 
     @PrePersist
-    public void setUsernameAndDomain() {
-        String[] usernameDomain = accountcode.split("@");
-        this.username = usernameDomain[0];
-        this.domain = usernameDomain[1];
+    private void prePersist() {
+        setUsernameAndDomain();
+        setObservacaoIfNullOrVazio();
+        calculateExpirationDate();
     }
+
+    private void setUsernameAndDomain() {
+        if (accountcode != null && accountcode.contains("@")) {
+            String[] usernameDomain = accountcode.split("@", 2);
+            this.username = usernameDomain[0];
+            this.domain = usernameDomain[1];
+        }
+    }
+
+    private void setObservacaoIfNullOrVazio() {
+        if (this.observacao == null || this.observacao.isBlank()) {
+            this.observacao = "Recarga Telefonia Via Api";
+        }
+    }
+
 
     public void calculateExpirationDate() {
         if (criacao != null && expiracao != null && expiracao.matches("\\d+")) {

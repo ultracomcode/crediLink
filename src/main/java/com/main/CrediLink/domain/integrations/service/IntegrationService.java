@@ -2,6 +2,7 @@ package com.main.CrediLink.domain.integrations.service;
 
 
 import com.main.CrediLink.domain.integrations.dto.IntegrationRequest;
+import com.main.CrediLink.domain.integrations.dto.IntegrationResponse;
 import com.main.CrediLink.domain.integrations.entity.IntegrationEntity;
 import com.main.CrediLink.domain.integrations.enums.IntegrationStatus;
 import com.main.CrediLink.domain.integrations.enums.IntegrationsType;
@@ -9,9 +10,9 @@ import com.main.CrediLink.domain.integrations.repository.IntegrationRepository;
 import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.utils.CryptoService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class IntegrationService {
@@ -45,9 +46,14 @@ public class IntegrationService {
         return new ResponseDTO("success","Integraçao cadastrada com sucesso");
     }
 
+    public Page<IntegrationResponse> findAll(Pageable pageable){
+        return integrationRepository.findAll(pageable)
+                .map(IntegrationResponse::fromEntity);
+    }
+
     public IntegrationEntity findByTypeAndStatus(IntegrationsType type) {
         return integrationRepository.findByTypeAndStatus(type, IntegrationStatus.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("IntegrationEntity configuration for " + type + " not found"));
+                .orElse(null);
     }
 
 }

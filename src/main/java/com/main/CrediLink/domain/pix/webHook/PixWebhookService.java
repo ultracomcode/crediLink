@@ -15,6 +15,9 @@ public class PixWebhookService {
     }
 
     public void checkWebhookNotifications(List<PixNotificacaoDTO> pixList) {
-        pixList.forEach(pixProcessor::processNotification);
+
+        for (PixNotificacaoDTO pix : pixList) {
+            pixProcessor.processNotification(pix);
+        }
     }
 }

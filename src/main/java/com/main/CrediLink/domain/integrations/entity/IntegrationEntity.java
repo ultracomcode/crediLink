@@ -42,7 +42,7 @@ public class IntegrationEntity {
     private String idContaContabil;
 
     @Column(name = "id_produto")
-    private String idPproduto;
+    private String idProduto;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")

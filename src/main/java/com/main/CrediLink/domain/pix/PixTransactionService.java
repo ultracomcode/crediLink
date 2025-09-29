@@ -5,12 +5,14 @@ import com.main.CrediLink.domain.bancos.dtos.PixPaymentResponse;
 import com.main.CrediLink.domain.bancos.itau.service.ItauService;
 import com.main.CrediLink.domain.pix.dto.RequestPixDTO;
 import com.main.CrediLink.domain.pix.dto.ResponsePixDto;
+import com.main.CrediLink.domain.pix.dto.ResponsePixSave;
 import com.main.CrediLink.domain.pix.exceptions.PixException;
 import com.main.CrediLink.domain.utils.CurrentUserService;
 import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.enuns.PixStatus;
 import com.main.CrediLink.utils.ValidadeValueUtils;
 import feign.FeignException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,7 +34,8 @@ public class PixTransactionService {
         this.currentUserService = currentUserService;
     }
 
-    public ResponseDTO generatePixRequest(RequestPixDTO requestPixDTO) {
+    @Transactional
+    public ResponsePixSave generatePixRequest(RequestPixDTO requestPixDTO) {
         validarUsuario();
 
         try {
@@ -48,13 +51,23 @@ public class PixTransactionService {
         }
     }
 
-    private ResponseDTO save(PixPaymentResponse dto, RequestPixDTO requestPixDTO) {
+
+    private ResponsePixSave save(PixPaymentResponse dto, RequestPixDTO requestPixDTO) {
 
         PixTransactionEntity entity = buildPixTransactionEntity(dto, requestPixDTO);
 
-        pixTransactionRepository.save(entity);
+        var pixTransaction = pixTransactionRepository.save(entity);
 
-        return new ResponseDTO("success", "Pix criado com sucesso");
+        return new ResponsePixSave(
+                "success",
+                "Pix criado com sucesso",
+                new ResponsePixSave.Pix(
+                        pixTransaction.getDataExpiracao(),
+                        pixTransaction.getPixCopiaECola(),
+                        pixTransaction.getStatus(),
+                        pixTransaction.getValor()
+                )
+        );
 
     }
 
@@ -83,30 +96,24 @@ public class PixTransactionService {
     }
 
     private PixTransactionEntity buildPixTransactionEntity(PixPaymentResponse dto, RequestPixDTO userDTO) {
-
         PixTransactionEntity entity = new PixTransactionEntity();
-        BeanUtils.copyProperties(dto, entity);
 
-        if (dto.status().equals("ATIVA")) {
-            entity.setStatus(PixStatus.AT);
-        }
+        if (dto.status().equals("ATIVA")) entity.setStatus(PixStatus.AT);
 
-        if (userDTO.obs() == null || userDTO.obs().isEmpty()) {
-            entity.setObservacao("Recarga Telefonia Via Api");
-        }else {
-            entity.setObservacao(userDTO.obs());
-        }
-
-        entity.setCriacaoFromIsoZ(dto.calendario().criacao());
+        entity.setTxid(dto.txid());
+        entity.setPixCopiaECola(dto.pixCopiaECola());
+        entity.setLocation(dto.location());
         entity.setValor(dto.valor().original());
+        entity.setCriacaoFromIsoZ(dto.calendario().criacao());
         entity.setExpiracao(dto.calendario().expiracao());
-        entity.calculateExpirationDate();
         entity.setAccountcode(userDTO.accountCode());
         entity.setUser(currentUserService.getCurrentUser());
-
+        entity.setObservacao(userDTO.obs());
+        entity.setChave(chavePix);
 
         return entity;
     }
+
 
 
     public ResponseDTO cancelPix(String txid) {

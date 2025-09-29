@@ -141,7 +141,7 @@ public class InvoiceService {
     }
 
     private IxcMinimalDTO getMinimalDataIntegration(){
-        return getProductsById(integrationService.findByTypeAndStatus(IntegrationsType.IXC).getIdPproduto())
+        return getProductsById(integrationService.findByTypeAndStatus(IntegrationsType.IXC).getIdProduto())
                 .registros().get(0);
     }
 }
