@@ -1,28 +1,41 @@
 package com.main.CrediLink.domain.pix.dto;
 
-import com.main.CrediLink.domain.pix.PixEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.main.CrediLink.domain.pix.PixTransactionEntity;
+import com.main.CrediLink.enuns.PixStatus;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 public record ResponsePixDto(
         Long id,
-        OffsetDateTime criacao,
+        String username,
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime criacao,
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime vencimento,
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime pagamento,
+
         String pixCopiaECola,
-        String status,
+        PixStatus status,
         String accountCode,
-        String qrcode,
         String value,
         String obs
 
 ) {
-    public static ResponsePixDto fromEntity(PixEntity entity) {
+    public static ResponsePixDto fromEntity(PixTransactionEntity entity) {
         return new ResponsePixDto(
                 entity.getId(),
+                entity.getUser().getUsername(),
                 entity.getCriacao(),
-                entity.getPixCopiaECola(),
+                entity.getDataExpiracao(),
+                entity.getPaymentAt(),
+                entity.getStatus() != PixStatus.AT ? null : entity.getPixCopiaECola(),
                 entity.getStatus(),
                 entity.getAccountcode(),
-                "data:image/png;base64," + entity.getQrcode(),
                 entity.getValor(),
                 entity.getObservacao()
         );

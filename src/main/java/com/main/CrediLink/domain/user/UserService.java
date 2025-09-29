@@ -1,11 +1,11 @@
 package com.main.CrediLink.domain.user;
 
 import com.main.CrediLink.domain.user.dto.RequestUserDTO;
-import com.main.CrediLink.domain.user.dto.ResponseSaveUserDTO;
 import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
 import com.main.CrediLink.domain.user.exceptions.UserException;
 import com.main.CrediLink.domain.utils.CurrentUserService;
-import com.main.CrediLink.sippulse.dto.AccountCodesDTO;
+import com.main.CrediLink.dtos.ResponseDTO;
+import com.main.CrediLink.sippulse.dto.AccountCreditsDTO;
 import com.main.CrediLink.sippulse.services.SubscriberService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseSaveUserDTO save(RequestUserDTO userDTO){
+    public ResponseDTO save(RequestUserDTO userDTO){
 
         var userEntity = new UserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
@@ -46,7 +46,8 @@ public class UserService {
 
         userRepository.save(userEntity);
 
-        return new ResponseSaveUserDTO(
+        return new ResponseDTO(
+                "success",
                 "Usuário cadastrado com sucesso!"
         );
     }
@@ -70,7 +71,7 @@ public class UserService {
         return user.orElseThrow(() -> new UserException("Usuario Não encontrado"));
     }
 
-    public AccountCodesDTO findAllAccountcode(){
+    public AccountCreditsDTO findAllAccountcode(){
 
         return subscriberService.findAllAccountcode(currentUserService.getCurrentUser().getIdCrm());
     }

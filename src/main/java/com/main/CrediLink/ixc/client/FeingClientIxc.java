@@ -1,7 +1,7 @@
 package com.main.CrediLink.ixc.client;
 
 import com.main.CrediLink.ixc.dto.generate_finacial.GenerateFinancialRequest;
-import com.main.CrediLink.ixc.dto.ResponseDTO;
+import com.main.CrediLink.dtos.ResponseDTO;
 import com.main.CrediLink.ixc.dto.additional_service.ResponseServiceAdditional;
 import com.main.CrediLink.ixc.dto.additional_service.RequestAdditionalService;
 import com.main.CrediLink.ixc.dto.IxcResponseDTO;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
         url = "${ixc.api.base-url}",
         configuration = MeuFeignConfig.class
 )
-public interface FeingClientIxc {
+public interface FeingClientIxc{
 
     @PostMapping(path = "/cliente_contrato_servicos",
             consumes = MediaType.APPLICATION_JSON_VALUE)

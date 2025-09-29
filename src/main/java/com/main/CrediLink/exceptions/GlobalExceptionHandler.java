@@ -1,5 +1,8 @@
 package com.main.CrediLink.exceptions;
 
+import com.main.CrediLink.domain.pix.exceptions.PixException;
+import com.main.CrediLink.domain.user.exceptions.UserException;
+import com.main.CrediLink.dtos.ResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +22,27 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+        String rawMessage = ex.getMessage();
+        String userMessage;
+
+        if (rawMessage != null && rawMessage.startsWith("No enum constant")) {
+            // Extrai a última parte do enum (o valor inválido)
+            String[] parts = rawMessage.split("\\.");
+            userMessage = "Tipo inválido: " + parts[parts.length - 1];
+        } else {
+            userMessage = ex.getMessage();
+        }
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", HttpStatus.BAD_REQUEST.value());
+        error.put("error", userMessage);
+
+        return ResponseEntity.badRequest().body(Map.of("data", error));
+    }
+
 
     @ExceptionHandler(AccountCodeNotFoundException.class)
     public ResponseEntity<Object> handleAccountCodeNotFound(AccountCodeNotFoundException ex) {
@@ -85,6 +109,22 @@ public class GlobalExceptionHandler {
         body.put("data", errorDetails);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<Object> handleUserNotFound(UserException ex) {
+        return new ResponseEntity<>(new ResponseDTO(
+                "error",
+                ex.getMessage()
+        ), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PixException.class)
+    public ResponseEntity<Object> handleUserNotFound(PixException ex) {
+        return new ResponseEntity<>(new ResponseDTO(
+                "error",
+                ex.getMessage()
+        ), HttpStatus.BAD_REQUEST);
     }
 
 }

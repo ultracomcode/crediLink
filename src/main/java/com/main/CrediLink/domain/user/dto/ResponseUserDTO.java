@@ -1,6 +1,7 @@
 package com.main.CrediLink.domain.user.dto;
 
 import com.main.CrediLink.domain.user.UserEntity;
+import com.main.CrediLink.utils.FormatterUtils;
 
 public record ResponseUserDTO(
         Long id,
@@ -19,8 +20,8 @@ public record ResponseUserDTO(
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getUsername(),
-                userEntity.getCpfCnpj(),
-                userEntity.getPhone(),
+                FormatterUtils.formatCpfCnpj(userEntity.getCpfCnpj()),
+                FormatterUtils.formatPhone(userEntity.getPhone()),
                 userEntity.getIdCrm(),
                 userEntity.getStatus().toString(),
                 userEntity.getRole().toString()

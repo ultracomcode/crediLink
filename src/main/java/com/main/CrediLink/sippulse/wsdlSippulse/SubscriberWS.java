@@ -51,6 +51,35 @@ public interface SubscriberWS {
      * @throws WSException
      */
     @WebMethod
+    @RequestWrapper(localName = "changePassword", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePassword")
+    @ResponseWrapper(localName = "changePasswordResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePasswordResponse")
+    public void changePassword(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "actualPassword", targetNamespace = "")
+        String actualPassword,
+        @WebParam(name = "newPassword", targetNamespace = "")
+        String newPassword,
+        @WebParam(name = "confirmNewPassword", targetNamespace = "")
+        String confirmNewPassword,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param confirmNewPassword
+     * @param principal
+     * @param domain
+     * @param actualPassword
+     * @param newPassword
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
     @RequestWrapper(localName = "changePasswordWEB", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePasswordWEB")
     @ResponseWrapper(localName = "changePasswordWEBResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePasswordWEBResponse")
     public void changePasswordWEB(
@@ -64,6 +93,29 @@ public interface SubscriberWS {
         String newPassword,
         @WebParam(name = "confirmNewPassword", targetNamespace = "")
         String confirmNewPassword,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param newProfileId
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "changeProfile", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangeProfile")
+    @ResponseWrapper(localName = "changeProfileResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangeProfileResponse")
+    public void changeProfile(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "newProfileId", targetNamespace = "")
+        Integer newProfileId,
         @WebParam(name = "principal", targetNamespace = "")
         UserPrincipalDTO principal)
         throws WSException
@@ -98,14 +150,74 @@ public interface SubscriberWS {
     /**
      * 
      * @param principal
+     * @param subscriber
+     * @return
+     *     returns java.lang.Integer
+     * @throws WSException
+     */
+    @WebMethod
+    @WebResult(name = "subscriberId", targetNamespace = "")
+    @RequestWrapper(localName = "insertSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.InsertSubscriber")
+    @ResponseWrapper(localName = "insertSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.InsertSubscriberResponse")
+    public Integer insertSubscriber(
+        @WebParam(name = "subscriber", targetNamespace = "")
+        SubscriberDTO subscriber,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
      * @param domain
      * @param username
      * @throws WSException
      */
     @WebMethod
-    @RequestWrapper(localName = "blockVoicemail", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockVoicemail")
-    @ResponseWrapper(localName = "blockVoicemailResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockVoicemailResponse")
-    public void blockVoicemail(
+    @RequestWrapper(localName = "blockCollectCalls", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockCollectCalls")
+    @ResponseWrapper(localName = "blockCollectCallsResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockCollectCallsResponse")
+    public void blockCollectCalls(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "blockAnonymousCalls", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockAnonymousCalls")
+    @ResponseWrapper(localName = "blockAnonymousCallsResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockAnonymousCallsResponse")
+    public void blockAnonymousCalls(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "blockEntry0303", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockEntry0303")
+    @ResponseWrapper(localName = "blockEntry0303Response", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockEntry0303Response")
+    public void blockEntry0303(
         @WebParam(name = "username", targetNamespace = "")
         String username,
         @WebParam(name = "domain", targetNamespace = "")
@@ -216,69 +328,6 @@ public interface SubscriberWS {
     public void updateSubscriberClassV(
         @WebParam(name = "subscriber", targetNamespace = "")
         SubscriberClassVDTO subscriber,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "blockSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockSubscriber")
-    @ResponseWrapper(localName = "blockSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockSubscriberResponse")
-    public void blockSubscriber(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "activateSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateSubscriber")
-    @ResponseWrapper(localName = "activateSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateSubscriberResponse")
-    public void activateSubscriber(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param voicemailPassword
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "activateVoicemail", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateVoicemail")
-    @ResponseWrapper(localName = "activateVoicemailResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateVoicemailResponse")
-    public void activateVoicemail(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "voicemailPassword", targetNamespace = "")
-        Long voicemailPassword,
         @WebParam(name = "principal", targetNamespace = "")
         UserPrincipalDTO principal)
         throws WSException
@@ -667,6 +716,89 @@ public interface SubscriberWS {
     /**
      * 
      * @param principal
+     * @param domain
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "activateSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateSubscriber")
+    @ResponseWrapper(localName = "activateSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateSubscriberResponse")
+    public void activateSubscriber(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param voicemailPassword
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "activateVoicemail", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateVoicemail")
+    @ResponseWrapper(localName = "activateVoicemailResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ActivateVoicemailResponse")
+    public void activateVoicemail(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "voicemailPassword", targetNamespace = "")
+        Long voicemailPassword,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "blockVoicemail", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockVoicemail")
+    @ResponseWrapper(localName = "blockVoicemailResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockVoicemailResponse")
+    public void blockVoicemail(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
+     * @param domain
+     * @param username
+     * @throws WSException
+     */
+    @WebMethod
+    @RequestWrapper(localName = "blockSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockSubscriber")
+    @ResponseWrapper(localName = "blockSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockSubscriberResponse")
+    public void blockSubscriber(
+        @WebParam(name = "username", targetNamespace = "")
+        String username,
+        @WebParam(name = "domain", targetNamespace = "")
+        String domain,
+        @WebParam(name = "principal", targetNamespace = "")
+        UserPrincipalDTO principal)
+        throws WSException
+    ;
+
+    /**
+     * 
+     * @param principal
      * @param monthlyQuotaDTO
      * @throws WSException
      */
@@ -822,138 +954,6 @@ public interface SubscriberWS {
         String username,
         @WebParam(name = "domain", targetNamespace = "")
         String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param subscriber
-     * @return
-     *     returns java.lang.Integer
-     * @throws WSException
-     */
-    @WebMethod
-    @WebResult(name = "subscriberId", targetNamespace = "")
-    @RequestWrapper(localName = "insertSubscriber", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.InsertSubscriber")
-    @ResponseWrapper(localName = "insertSubscriberResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.InsertSubscriberResponse")
-    public Integer insertSubscriber(
-        @WebParam(name = "subscriber", targetNamespace = "")
-        SubscriberDTO subscriber,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param newProfileId
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "changeProfile", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangeProfile")
-    @ResponseWrapper(localName = "changeProfileResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangeProfileResponse")
-    public void changeProfile(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "newProfileId", targetNamespace = "")
-        Integer newProfileId,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "blockCollectCalls", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockCollectCalls")
-    @ResponseWrapper(localName = "blockCollectCallsResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockCollectCallsResponse")
-    public void blockCollectCalls(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "blockAnonymousCalls", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockAnonymousCalls")
-    @ResponseWrapper(localName = "blockAnonymousCallsResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockAnonymousCallsResponse")
-    public void blockAnonymousCalls(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param principal
-     * @param domain
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "blockEntry0303", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockEntry0303")
-    @ResponseWrapper(localName = "blockEntry0303Response", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.BlockEntry0303Response")
-    public void blockEntry0303(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "principal", targetNamespace = "")
-        UserPrincipalDTO principal)
-        throws WSException
-    ;
-
-    /**
-     * 
-     * @param confirmNewPassword
-     * @param principal
-     * @param domain
-     * @param actualPassword
-     * @param newPassword
-     * @param username
-     * @throws WSException
-     */
-    @WebMethod
-    @RequestWrapper(localName = "changePassword", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePassword")
-    @ResponseWrapper(localName = "changePasswordResponse", targetNamespace = "http://service.ws.sippulse.voffice.com.br/", className = "com.main.CrediLink.sippulse.wsdlSippulse.ChangePasswordResponse")
-    public void changePassword(
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "domain", targetNamespace = "")
-        String domain,
-        @WebParam(name = "actualPassword", targetNamespace = "")
-        String actualPassword,
-        @WebParam(name = "newPassword", targetNamespace = "")
-        String newPassword,
-        @WebParam(name = "confirmNewPassword", targetNamespace = "")
-        String confirmNewPassword,
         @WebParam(name = "principal", targetNamespace = "")
         UserPrincipalDTO principal)
         throws WSException
