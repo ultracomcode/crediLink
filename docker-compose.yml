@@ -21,7 +21,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - postgres
     networks:
       - private_net
       - public_net
@@ -30,6 +30,6 @@ volumes:
 
 networks:
   private_net:
-    internal: true   # só containers dessa rede conseguem se falar
+    internal: true
   public_net:
-    external: false  # rede visível externamente (exposição de portas)
+    external: false

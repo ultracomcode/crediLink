@@ -1,11 +1,11 @@
 package com.main.CrediLink;
 
-import com.main.CrediLink.domain.user.UserEntity;
-import com.main.CrediLink.domain.user.UserRepository;
-import com.main.CrediLink.domain.user.UserService;
-import com.main.CrediLink.domain.user.dto.ResponseUserDTO;
-import com.main.CrediLink.domain.user.enuns.StatusUser;
-import com.main.CrediLink.domain.user.enuns.UserRole;
+import com.main.CrediLink.application.user.UserEntity;
+import com.main.CrediLink.application.user.UserRepository;
+import com.main.CrediLink.application.user.UserService;
+import com.main.CrediLink.application.user.dto.ResponseUserDTO;
+import com.main.CrediLink.application.user.enuns.StatusUser;
+import com.main.CrediLink.application.user.enuns.UserRole;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,6 +30,8 @@ public class UserServiceTest {
         UserEntity user = new UserEntity();
         user.setId(1L);
         user.setName("Lucas");
+        user.setCpfCnpj("12345678909");
+        user.setPhone("2728889090");
         user.setStatus(StatusUser.A);
         user.setRole(UserRole.ADMIN.getRole());
 

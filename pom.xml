@@ -243,20 +243,6 @@
 				</configuration>
 			</plugin>
 
-			<!--  ADICIONAL - Plugin para gerar imagens do QR Code -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<nonFilteredFileExtensions>
-						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
-						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
-						<nonFilteredFileExtension>crt</nonFilteredFileExtension>
-						<nonFilteredFileExtension>key</nonFilteredFileExtension>
-					</nonFilteredFileExtensions>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
@@ -270,7 +256,7 @@
 							<wsdlUrls>
 								<wsdlUrl>http://181.191.206.175:8080/SipPulse/SubscriberWS?wsdl</wsdlUrl>
 							</wsdlUrls>
-							<packageName>com.main.CrediLink.sippulse.wsdlSippulse</packageName>
+							<packageName>com.main.CrediLink.integration.sippulse.wsdlSippulse</packageName>
 							<sourceDestDir>src/main/java</sourceDestDir>
 							<keep>true</keep>
 							<verbose>true</verbose>
