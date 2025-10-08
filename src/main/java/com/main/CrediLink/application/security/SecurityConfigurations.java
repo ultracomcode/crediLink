@@ -38,7 +38,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
 
                         .requestMatchers(HttpMethod.POST, "/auth/login","/auth/logout").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/me").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
 
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/webhook/notify/pix").permitAll()

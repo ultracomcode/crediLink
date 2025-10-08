@@ -116,7 +116,6 @@ public class UserService {
     public ResponseDTO toggleUserStatus(UUID id) {
         return userRepository.findByIdentifier(id)
                 .map(user -> {
-                    // alterna entre A e I
                     StatusUser newStatus = user.getStatus() == StatusUser.A ? StatusUser.I : StatusUser.A;
                     user.setStatus(newStatus);
                     userRepository.save(user);
