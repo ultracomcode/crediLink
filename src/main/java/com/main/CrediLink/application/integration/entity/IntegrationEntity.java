@@ -59,7 +59,7 @@ public class IntegrationEntity {
 
     @PrePersist
     public void setCreationDate() {
-        this.status = IntegrationStatus.ACTIVE;
+        this.status = IntegrationStatus.A;
         this.identifier = UUID.randomUUID();
     }
 

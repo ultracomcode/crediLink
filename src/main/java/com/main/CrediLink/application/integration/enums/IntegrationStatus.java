@@ -1,8 +1,8 @@
 package com.main.CrediLink.application.integration.enums;
 
 public enum IntegrationStatus {
-    ACTIVE("ACTIVE"),
-    INACTIVE("INACTIVE");
+    A("ACTIVE"),
+    I("INACTIVE");
     IntegrationStatus(String descricao) {
     }
 }
