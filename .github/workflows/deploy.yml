@@ -42,5 +42,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /opt/projeto
+            cd /home/credlink
             ./deploy.sh
