@@ -4,9 +4,12 @@ import com.main.CrediLink.application.integration.entity.IntegrationEntity;
 import com.main.CrediLink.application.integration.enums.IntegrationStatus;
 import com.main.CrediLink.application.integration.enums.IntegrationsType;
 
+import java.util.UUID;
+
 public record IntegrationResponse(
         Long id,
         String name,
+        UUID identifier,
         String urlApi,
         String username,
         String idContaBanco,
@@ -19,6 +22,7 @@ public record IntegrationResponse(
         return new IntegrationResponse(
                 integration.getId(),
                 integration.getName(),
+                integration.getIdentifier(),
                 integration.getUrlApi(),
                 integration.getUsername(),
                 integration.getIdContaBanco(),
