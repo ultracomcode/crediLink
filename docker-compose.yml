@@ -11,6 +11,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - private_net
+      - public_net
 
   springboot:
     build: ./
@@ -22,9 +23,12 @@ services:
       - .env
     depends_on:
       - postgres
+    volumes:
+      - /etc/ssl/certs/itau:/etc/ssl/certs/itau:ro
     networks:
       - private_net
       - public_net
+
 volumes:
   postgres_data:
 
