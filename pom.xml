@@ -35,6 +35,13 @@
 			<artifactId>spring-boot-starter-web-services</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+
+
 		<!-- ADICIONAIS NECESSÁRIAS - Cliente HTTP para APIs bancárias -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -71,7 +78,14 @@
             <version>13.5</version>
         </dependency>
 
-		<!-- ADICIONAIS NECESSÁRIAS - Geração de QR Code -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>13.6</version> <!-- use a mesma versão do feign que você tem -->
+        </dependency>
+
+
+        <!-- ADICIONAIS NECESSÁRIAS - Geração de QR Code -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
@@ -108,11 +122,12 @@
 			<version>1.81</version>
 		</dependency>
 
+
 		<!-- ADICIONAIS NECESSÁRIAS - Processamento assíncrono -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-quartz</artifactId>-->
+<!--		</dependency>-->
 
 		<!-- JÁ TEM - Dependências de desenvolvimento -->
 		<dependency>
@@ -228,20 +243,6 @@
 				</configuration>
 			</plugin>
 
-			<!--  ADICIONAL - Plugin para gerar imagens do QR Code -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<nonFilteredFileExtensions>
-						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
-						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
-						<nonFilteredFileExtension>crt</nonFilteredFileExtension>
-						<nonFilteredFileExtension>key</nonFilteredFileExtension>
-					</nonFilteredFileExtensions>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
@@ -255,7 +256,7 @@
 							<wsdlUrls>
 								<wsdlUrl>http://181.191.206.175:8080/SipPulse/SubscriberWS?wsdl</wsdlUrl>
 							</wsdlUrls>
-							<packageName>com.main.CrediLink.sippulse.wsdlSippulse</packageName>
+							<packageName>com.main.CrediLink.integration.sippulse.wsdlSippulse</packageName>
 							<sourceDestDir>src/main/java</sourceDestDir>
 							<keep>true</keep>
 							<verbose>true</verbose>
