@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "integration")
 @Getter
@@ -25,6 +27,9 @@ public class IntegrationEntity {
 
     @Column(name = "token_api")
     private String tokenApi;
+
+    @Column(name = "identifier")
+    private UUID identifier;
 
     @Column(name = "url_api")
     private String urlApi;
@@ -55,6 +60,7 @@ public class IntegrationEntity {
     @PrePersist
     public void setCreationDate() {
         this.status = IntegrationStatus.ACTIVE;
+        this.identifier = UUID.randomUUID();
     }
 
 }
