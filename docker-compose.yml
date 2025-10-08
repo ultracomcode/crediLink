@@ -14,7 +14,7 @@ services:
       - public_net
 
   springboot:
-    build: ./
+    image: lucassantos/credilink:latest
     container_name: spring_app
     restart: always
     ports:
