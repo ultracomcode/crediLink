@@ -1,6 +1,12 @@
 package com.main.CrediLink.shared.utils;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class FormatterUtils {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static String formatCpfCnpj(String cpfCnpj) {
         String digits = cpfCnpj.replaceAll("\\D", "");
@@ -24,5 +30,12 @@ public class FormatterUtils {
                     "($1)$2-$3");
         }
         return phone;
+    }
+    public static String formatInstantToDate(Instant instant) {
+        if (instant == null) {
+            return null;
+        }
+        ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+        return zdt.format(FORMATTER);
     }
 }

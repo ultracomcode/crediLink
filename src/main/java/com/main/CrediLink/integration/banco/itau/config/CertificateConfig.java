@@ -50,9 +50,4 @@ public class CertificateConfig {
         return new ApacheHttpClient(httpClient);
     }
 
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        // FULL = log completo de request/response
-        return Logger.Level.FULL;
-    }
 }
