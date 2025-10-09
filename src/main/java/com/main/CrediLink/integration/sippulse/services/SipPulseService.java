@@ -30,6 +30,7 @@ public class SipPulseService {
 
     private SubscriberWS getSubscriberWSPort() {
         try {
+
             URL wsdlUrl = new URL(integration().getUrlApi() + "?wsdl");
             SipPulse service = new SipPulse(wsdlUrl);
             return service.getSubscriberWSPort();
