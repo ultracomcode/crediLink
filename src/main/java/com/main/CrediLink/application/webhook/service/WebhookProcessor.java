@@ -39,6 +39,7 @@ public class WebhookProcessor {
                     entity.setPaymentAt(Instant.parse(notify.horario()));
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
+
                     invoiceService.receiveInvoice(entity);
 
                     entity.setStatus(PixStatus.CO);

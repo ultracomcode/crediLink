@@ -65,12 +65,9 @@ public class PostgresConfig {
 
         // Adicionar propriedades específicas do Hibernate
         HashMap<String, Object> jpaProperties = new HashMap<>();
-        jpaProperties.put("hibernate.hbm2ddl.auto", "update"); // ou "create" se quiser recriar sempre
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         jpaProperties.put("hibernate.default_schema", "credilink");
-        jpaProperties.put("hibernate.format_sql", "true");
-        jpaProperties.put("hibernate.show_sql", "true");
-        jpaProperties.put("hibernate.use_sql_comments", "true");
         em.setJpaPropertyMap(jpaProperties);
 
         return em;

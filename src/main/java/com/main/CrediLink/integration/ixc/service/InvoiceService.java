@@ -13,6 +13,7 @@ import com.main.CrediLink.integration.ixc.dto.additional_service.ResponseService
 import com.main.CrediLink.integration.ixc.dto.generate_finacial.GenerateFinancialRequest;
 import com.main.CrediLink.integration.ixc.dto.receive_invoice.InvoiceRequestDTO;
 import com.main.CrediLink.integration.ixc.dto.receive_invoice.ReceiveInvoiceRequestDTO;
+import com.main.CrediLink.shared.utils.FormatterUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,7 @@ public class InvoiceService {
         }
 
         var invoiceResponse = getInvoiceBySalesId(financialResponse.message());
+
         if (invoiceResponse.registros().isEmpty()) {
             throw new PixException("Nenhum registro encontrado para a venda: " + financialResponse.message());
         }
@@ -54,7 +56,7 @@ public class InvoiceService {
                 "7",
                 "1807",
                 "Pix",
-                pixTransactionEntity.getPaymentAt().toString(),
+                FormatterUtils.formatInstantToDate(pixTransactionEntity.getPaymentAt()),
                 pixTransactionEntity.getValor(),
                 pixTransactionEntity.getValor(),
                 pixTransactionEntity.getValor(),
@@ -62,9 +64,10 @@ public class InvoiceService {
                 "R"
         );
 
-        return feingClientIxc.receiveInvoice(request);
-    }
+        var response = feingClientIxc.receiveInvoice(request);
 
+        return response;
+    }
 
     private IxcResponseDTO getInvoiceBySalesId(String idSaida){
         var request = new InvoiceRequestDTO(
@@ -89,8 +92,6 @@ public class InvoiceService {
         );
 
         var response = feingClientIxc.btnGenerateFinancial(request);
-
-        System.out.println(response);
 
         Matcher matcher = ID_SAIDA_PATTERN.matcher(response.message());
 
