@@ -71,6 +71,7 @@ public class ItauService implements Banco {
         try {
 
             var tokenEntity = getToken();
+
             String authorizationHeader = tokenEntity.getTokenType() + " " + tokenEntity.getAccessToken();
 
             var requestPix = feingPixRequest.createCharge(
