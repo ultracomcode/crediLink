@@ -44,7 +44,7 @@ public class AuthenticationController {
 
             ResponseCookie cookie = ResponseCookie.from("JWT_TOKEN", token)
                     .httpOnly(true)
-                    .secure(true)
+                    .secure(false)
                     .path("/")
                     .maxAge(7200)
                     .sameSite("Strict")
