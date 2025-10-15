@@ -93,7 +93,7 @@ public class PixTransactionService {
         var value = ValidadeValueUtils.validateAndFormatAmount(valor);
 
         PixPaymentRequest request = new PixPaymentRequest(
-                new PixPaymentRequest.Calendario(600),
+                new PixPaymentRequest.Calendario(60),
                 new PixPaymentRequest.Valor((value)),
                 chavePix
         );
@@ -124,6 +124,9 @@ public class PixTransactionService {
 
     @Transactional
     public ResponseDTO cancelPix(String txid) {
+
+        System.out.println(txid);
+
         int updated = pixTransactionRepository
                 .updateStatusIfCancellable(
                         txid,

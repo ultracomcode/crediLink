@@ -83,7 +83,7 @@ public class IntegrationService {
         if (request.username() != null) integration.setUsername(request.username());
         if (request.idContaBanco() != null) integration.setIdContaBanco(request.idContaBanco());
         if (request.idContaContabil() != null) integration.setIdContaContabil(request.idContaContabil());
-
+        if (request.idProduto() != null) integration.setIdProduto(request.idProduto());
 
         integrationRepository.save(integration);
 

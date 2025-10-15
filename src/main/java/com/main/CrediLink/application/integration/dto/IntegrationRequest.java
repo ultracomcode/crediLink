@@ -8,6 +8,7 @@ public record IntegrationRequest (
         String password,
         String idContaBanco,
         String idContaContabil,
+        String idProduto,
         String type
 ){
 }
