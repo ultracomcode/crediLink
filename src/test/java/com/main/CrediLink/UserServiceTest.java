@@ -33,7 +33,7 @@ public class UserServiceTest {
         user.setCpfCnpj("12345678909");
         user.setPhone("2728889090");
         user.setStatus(StatusUser.A);
-        user.setRole(UserRole.ADMIN.getRole());
+        user.setRole(UserRole.ADMIN);
 
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
 
