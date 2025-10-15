@@ -101,10 +101,6 @@ public class UserEntity implements UserDetails {
         return this.status == StatusUser.A;
     }
 
-    public void setRole(String role) {
-        this.role = UserRole.valueOf(role.toUpperCase());
-    }
-
     public boolean isAdmin() {
         return role != null && role.isAdmin();
     }

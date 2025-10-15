@@ -13,9 +13,6 @@ public record RequestAdminDTO(
         String username,
 
         @NotBlank
-        String password,
-
-        @NotBlank
-        String role
+        String password
 ) {
 }
