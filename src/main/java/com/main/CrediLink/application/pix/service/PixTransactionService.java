@@ -94,7 +94,7 @@ public class PixTransactionService {
         var value = ValidadeValueUtils.validateAndFormatAmount(valor);
 
         PixPaymentRequest request = new PixPaymentRequest(
-                new PixPaymentRequest.Calendario(60),
+                new PixPaymentRequest.Calendario(600),
                 new PixPaymentRequest.Valor((value)),
                 chavePix
         );
