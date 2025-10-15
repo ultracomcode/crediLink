@@ -68,6 +68,7 @@ public class PixTransactionService {
                 "Pix criado com sucesso",
                 new ResponsePixSave.Pix(
                         pixTransaction.getDataExpiracao(),
+                        pixTransaction.getPaymentAt(),
                         pixTransaction.getPixCopiaECola(),
                         pixTransaction.getTxid(),
                         pixTransaction.getStatus(),
