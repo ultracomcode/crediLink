@@ -5,6 +5,7 @@ import com.main.CrediLink.application.user.dto.RequestUpdateUserDTO;
 import com.main.CrediLink.application.user.dto.RequestUserDTO;
 import com.main.CrediLink.application.user.dto.ResponseUserDTO;
 import com.main.CrediLink.application.user.enuns.StatusUser;
+import com.main.CrediLink.application.user.enuns.UserRole;
 import com.main.CrediLink.application.user.exceptions.UserException;
 import com.main.CrediLink.application.utils.CurrentUserService;
 import com.main.CrediLink.integration.sippulse.dto.AccountCreditsDTO;
@@ -40,13 +41,8 @@ public class UserService {
         var userEntity = new UserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
 
-        String tipo = userDTO.role().toLowerCase();
-        if (!tipo.equals("user")) {
-            throw new IllegalArgumentException("Tipo de usuário inválido: " + userDTO.role());
-        }
-
         userEntity.setPassword(cryptPassword(userDTO.password()));
-        userEntity.setRole(tipo);
+        userEntity.setRole(UserRole.USER);
 
         userRepository.save(userEntity);
 
@@ -62,13 +58,9 @@ public class UserService {
         var userEntity = new UserEntity();
         BeanUtils.copyProperties(adminDTO, userEntity);
 
-        String tipo = adminDTO.role().toLowerCase();
-        if (!tipo.equals("admin")) {
-            throw new IllegalArgumentException("Tipo de usuário inválido: " + adminDTO.role());
-        }
 
         userEntity.setPassword(cryptPassword(adminDTO.password()));
-        userEntity.setRole(tipo);
+        userEntity.setRole(UserRole.ADMIN);
 
         userRepository.save(userEntity);
 

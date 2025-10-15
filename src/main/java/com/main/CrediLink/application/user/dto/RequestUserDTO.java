@@ -28,9 +28,6 @@ public record RequestUserDTO(
         String idCrm,
 
         @NotBlank
-        String idContrato,
-
-        @NotBlank
-        String role
+        String idContrato
 ) {
 }
