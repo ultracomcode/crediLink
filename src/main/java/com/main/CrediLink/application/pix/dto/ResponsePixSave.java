@@ -17,6 +17,9 @@ public record ResponsePixSave(
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             Instant vencimento,
 
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            Instant pagamento,
+
             String pixCopiaECola,
             String txid,
             PixStatus status,
@@ -25,6 +28,7 @@ public record ResponsePixSave(
         public static Pix fromEntity(PixTransactionEntity entity) {
             return new Pix(
                     entity.getDataExpiracao(),
+                    entity.getPaymentAt(),
                     entity.getPixCopiaECola(),
                     entity.getTxid(),
                     entity.getStatus(),
