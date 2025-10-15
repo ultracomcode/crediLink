@@ -5,11 +5,13 @@ import com.main.CrediLink.application.pix.dto.RequestPixDTO;
 import com.main.CrediLink.application.pix.dto.ResponsePixDto;
 import com.main.CrediLink.application.pix.dto.ResponsePixSave;
 import com.main.CrediLink.shared.dtos.ResponseDTO;
+import com.main.CrediLink.shared.enuns.PixStatus;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +27,10 @@ public class PixTransactionController {
     }
 
     @GetMapping("/pix")
-    public ResponseEntity<Page<ResponsePixDto>> listAll(@PageableDefault(
-            page = 0,
-            size = 5,
-            direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Page<ResponsePixDto>> listAll(
+            @PageableDefault(page = 0, size = 20)
+            @SortDefault(sort = "dataExpiracao", direction = Sort.Direction.DESC)
+            Pageable pageable){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pixTransactionService.listAll(pageable));
@@ -43,7 +45,7 @@ public class PixTransactionController {
     }
 
     @PostMapping("/pix/expired/{txid}")
-    public ResponseEntity<Void> changeStatusToExpired(@PathVariable String txid) {
+    public ResponseEntity<Void> changeStatusToExpired(@PathVariable(value = "txid") String txid) {
 
         pixTransactionService.expired(txid);
 
@@ -51,11 +53,16 @@ public class PixTransactionController {
     }
 
     @PostMapping("/pix/cancel/{txid}")
-    public ResponseEntity<ResponseDTO> cancelPix(@PathVariable String txid) {
+    public ResponseEntity<ResponseDTO> cancelPix(@PathVariable(value = "txid") String txid) {
+
+        var response = pixTransactionService.cancelPix(txid);
+
+        System.out.println(response.message());
+        System.out.println(response.type());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(pixTransactionService.cancelPix(txid));
+                .body(response);
 
     }
 

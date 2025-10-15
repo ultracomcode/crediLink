@@ -35,25 +35,38 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Serializable>> login(@RequestBody @Valid AuthenticationDTO data) {
         try {
-
             var authToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(authToken);
 
-
             var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
 
-            ResponseCookie cookie = ResponseCookie.from("JWT_TOKEN", token)
+
+            long maxAgeSeconds = 7200L;
+            long expiresAtSeconds = (System.currentTimeMillis() / 1000L) + maxAgeSeconds;
+
+
+            ResponseCookie jwtCookie = ResponseCookie.from("JWT_TOKEN", token)
                     .httpOnly(true)
-                    .secure(false)
+                    .secure(true) // em produção, use true com HTTPS
                     .path("/")
-                    .maxAge(7200)
+                    .maxAge(maxAgeSeconds)
+                    .sameSite("Strict")
+                    .build();
+
+            ResponseCookie sessionInfoCookie = ResponseCookie.from("SESSION_EXPIRES_AT", String.valueOf(expiresAtSeconds))
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(maxAgeSeconds)
                     .sameSite("Strict")
                     .build();
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .header(HttpHeaders.SET_COOKIE, sessionInfoCookie.toString())
                     .build();
-        }catch (DisabledException e) {
+
+        } catch (DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("success", false, "message", "Usuário está desabilitado"));
         }
@@ -80,8 +93,17 @@ public class AuthenticationController {
                 .sameSite("Strict")
                 .build();
 
+        ResponseCookie sessionInfoCookie = ResponseCookie.from("SESSION_EXPIRES_AT", "")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, sessionInfoCookie.toString())
                 .build();
     }
 }

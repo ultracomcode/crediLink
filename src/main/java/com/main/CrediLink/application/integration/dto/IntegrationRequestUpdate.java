@@ -7,6 +7,7 @@ public record IntegrationRequestUpdate(
         String username,
         String password,
         String idContaBanco,
-        String idContaContabil
+        String idContaContabil,
+        String idProduto
 ) {
 }
