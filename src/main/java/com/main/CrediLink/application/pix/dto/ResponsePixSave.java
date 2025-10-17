@@ -6,6 +6,7 @@ import com.main.CrediLink.shared.enuns.PixStatus;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ResponsePixSave(
         String type,
@@ -14,26 +15,22 @@ public record ResponsePixSave(
 ) {
 
     public record Pix (
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
             Instant vencimento,
-
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-            Instant pagamento,
-
             String pixCopiaECola,
             String txid,
             PixStatus status,
             String value
-    ){
-        public static Pix fromEntity(PixTransactionEntity entity) {
-            return new Pix(
-                    entity.getDataExpiracao(),
-                    entity.getPaymentAt(),
-                    entity.getPixCopiaECola(),
-                    entity.getTxid(),
-                    entity.getStatus(),
-                    entity.getValor()
-            );
-        }
+    ){}
+
+
+    public static Pix fromEntity(PixTransactionEntity entity) {
+        return new Pix(
+                entity.getDataExpiracao(),
+                entity.getPixCopiaECola(),
+                entity.getTxid(),
+                entity.getStatus(),
+                entity.getValor()
+        );
     }
 }

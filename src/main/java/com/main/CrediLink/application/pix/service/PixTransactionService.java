@@ -1,8 +1,5 @@
 package com.main.CrediLink.application.pix.service;
 
-import com.main.CrediLink.integration.banco.dto.PixPaymentRequest;
-import com.main.CrediLink.integration.banco.dto.PixPaymentResponse;
-import com.main.CrediLink.integration.banco.itau.service.ItauService;
 import com.main.CrediLink.application.pix.dto.RequestPixDTO;
 import com.main.CrediLink.application.pix.dto.ResponsePixDto;
 import com.main.CrediLink.application.pix.dto.ResponsePixSave;
@@ -10,6 +7,9 @@ import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
 import com.main.CrediLink.application.pix.exceptions.PixException;
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.utils.CurrentUserService;
+import com.main.CrediLink.integration.banco.dto.PixPaymentRequest;
+import com.main.CrediLink.integration.banco.dto.PixPaymentResponse;
+import com.main.CrediLink.integration.banco.itau.service.ItauService;
 import com.main.CrediLink.shared.dtos.ResponseDTO;
 import com.main.CrediLink.shared.enuns.PixStatus;
 import com.main.CrediLink.shared.utils.ValidadeValueUtils;
@@ -52,6 +52,8 @@ public class PixTransactionService {
         } catch (FeignException ex) {
             throw new PixException("Erro na integração com o banco", ex);
         } catch (Exception ex) {
+            System.out.println(ex);
+            System.out.println(ex.getMessage());
             throw new PixException("Erro inesperado ao criar cobrança Pix", ex);
         }
     }
@@ -62,13 +64,12 @@ public class PixTransactionService {
         PixTransactionEntity entity = buildPixTransactionEntity(dto, requestPixDTO);
 
         var pixTransaction = pixTransactionRepository.save(entity);
-
+        
         return new ResponsePixSave(
                 "success",
                 "Pix criado com sucesso",
                 new ResponsePixSave.Pix(
                         pixTransaction.getDataExpiracao(),
-                        pixTransaction.getPaymentAt(),
                         pixTransaction.getPixCopiaECola(),
                         pixTransaction.getTxid(),
                         pixTransaction.getStatus(),
@@ -111,8 +112,11 @@ public class PixTransactionService {
         entity.setPixCopiaECola(dto.pixCopiaECola());
         entity.setLocation(dto.location());
         entity.setValor(dto.valor().original());
-        entity.setCriacao(Instant.parse(dto.calendario().criacao()));
+
+        entity.setCriacao(Instant.now());
+
         entity.setExpiracao(dto.calendario().expiracao());
+
         entity.setAccountcode(userDTO.accountCode());
         entity.setUser(currentUserService.getCurrentUser());
         entity.setObservacao(userDTO.obs());

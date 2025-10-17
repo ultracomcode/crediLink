@@ -2,10 +2,10 @@ package com.main.CrediLink.application.webhook.service;
 
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.webhook.dto.WebhookNotificationDTO;
-import com.main.CrediLink.shared.enuns.PixStatus;
 import com.main.CrediLink.integration.ixc.service.InvoiceService;
 import com.main.CrediLink.integration.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.integration.sippulse.services.SipPulseService;
+import com.main.CrediLink.shared.enuns.PixStatus;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 public class WebhookProcessor {
@@ -36,7 +37,7 @@ public class WebhookProcessor {
         pixTransactionRepository.findByTxid(notify.txid()).ifPresent(entity -> {
             if (entity.getStatus() == PixStatus.AT) {
                 try {
-                    entity.setPaymentAt(Instant.parse(notify.horario()));
+                    entity.setPaymentAt(Instant.now());
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
 

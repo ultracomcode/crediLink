@@ -99,7 +99,10 @@ public class PixTransactionEntity {
     public void calculateExpirationDate() {
         if (criacao != null && expiracao != null && expiracao.matches("\\d+")) {
             long segundos = Long.parseLong(expiracao);
+
             this.dataExpiracao = criacao.plusSeconds(segundos);
+
+
         }
     }
 
