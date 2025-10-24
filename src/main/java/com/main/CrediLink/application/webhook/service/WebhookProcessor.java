@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Service
 public class WebhookProcessor {
@@ -34,9 +33,11 @@ public class WebhookProcessor {
     @Async
     @Transactional
     public void processNotification(WebhookNotificationDTO notify) {
+
         pixTransactionRepository.findByTxid(notify.txid()).ifPresent(entity -> {
             if (entity.getStatus() == PixStatus.AT) {
                 try {
+
                     entity.setPaymentAt(Instant.now());
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
@@ -44,12 +45,15 @@ public class WebhookProcessor {
                     invoiceService.receiveInvoice(entity);
 
                     entity.setStatus(PixStatus.CO);
+
                     pixTransactionRepository.save(entity);
 
                     log.info("PIX txid={} processado com sucesso", notify.txid());
 
                 } catch (Exception e) {
+
                     log.error("Erro ao processar notificação PIX txid={} : {}", notify.txid(), e.getMessage(), e);
+
                 }
             }
         });

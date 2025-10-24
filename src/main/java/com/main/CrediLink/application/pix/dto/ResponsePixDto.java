@@ -18,9 +18,9 @@ public record ResponsePixDto(
         Instant vencimento,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
         Instant pagamento,
-
         String pixCopiaECola,
         PixStatus status,
+        String userAccountCode,
         String accountCode,
         String value,
         String obs
@@ -36,6 +36,7 @@ public record ResponsePixDto(
                 entity.getPaymentAt(),
                 entity.getStatus() != PixStatus.AT ? null : entity.getPixCopiaECola(),
                 entity.getStatus(),
+                entity.getUsername(),
                 entity.getAccountcode(),
                 entity.getValor(),
                 entity.getObservacao()

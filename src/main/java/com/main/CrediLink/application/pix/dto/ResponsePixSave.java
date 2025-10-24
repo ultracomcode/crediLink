@@ -19,6 +19,7 @@ public record ResponsePixSave(
             Instant vencimento,
             String pixCopiaECola,
             String txid,
+            String username,
             PixStatus status,
             String value
     ){}
@@ -29,6 +30,7 @@ public record ResponsePixSave(
                 entity.getDataExpiracao(),
                 entity.getPixCopiaECola(),
                 entity.getTxid(),
+                entity.getUsername(),
                 entity.getStatus(),
                 entity.getValor()
         );

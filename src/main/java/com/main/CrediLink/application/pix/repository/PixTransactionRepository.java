@@ -1,7 +1,6 @@
 package com.main.CrediLink.application.pix.repository;
 
 import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
-import com.main.CrediLink.application.user.UserEntity;
 import com.main.CrediLink.shared.enuns.PixStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,8 +27,8 @@ public interface PixTransactionRepository extends JpaRepository<PixTransactionEn
             p.txid = :txid
           AND 
             p.status IN ('AT')
-          AND
-            p.user = :user
     """)
-    int updateStatusIfCancellable(@Param("txid") String txid, @Param("status") PixStatus status, @Param("user") UserEntity user);
+    int updateStatusIfCancellable(@Param("txid") String txid, @Param("status") PixStatus status);
+
+    List<PixTransactionEntity> findByStatus(PixStatus status);
 }
