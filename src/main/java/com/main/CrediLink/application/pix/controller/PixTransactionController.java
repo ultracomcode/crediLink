@@ -3,8 +3,10 @@ package com.main.CrediLink.application.pix.controller;
 import com.main.CrediLink.application.pix.dto.RequestPixDTO;
 import com.main.CrediLink.application.pix.dto.ResponsePixDto;
 import com.main.CrediLink.application.pix.dto.ResponsePixSave;
+import com.main.CrediLink.application.pix.dto.ResponsePixStatus;
 import com.main.CrediLink.application.pix.service.PixTransactionService;
 import com.main.CrediLink.shared.dtos.ResponseDTO;
+import com.main.CrediLink.shared.enuns.PixStatus;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,13 @@ public class PixTransactionController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pixTransactionService.listAll(pageable));
+    }
+    @GetMapping("/pix/{txid}")
+    public ResponseEntity<ResponsePixStatus> getByTxid(@PathVariable(value = "txid") String txid){
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(pixTransactionService.getByTxid(txid));
     }
 
     @PostMapping("/pix/create")

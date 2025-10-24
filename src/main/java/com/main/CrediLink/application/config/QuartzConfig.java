@@ -20,7 +20,7 @@ public class QuartzConfig {
     @Bean
     public Trigger pixExpirationTrigger(JobDetail pixExpirationJobDetail) {
         SimpleScheduleBuilder schedule = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInSeconds(60)
+                .withIntervalInSeconds(1)
                 .repeatForever()
                 .withMisfireHandlingInstructionNextWithRemainingCount();
 

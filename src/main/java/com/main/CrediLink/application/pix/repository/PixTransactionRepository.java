@@ -1,5 +1,6 @@
 package com.main.CrediLink.application.pix.repository;
 
+import com.main.CrediLink.application.pix.dto.ResponsePixStatus;
 import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
 import com.main.CrediLink.shared.enuns.PixStatus;
 import org.springframework.data.domain.Page;
@@ -31,4 +32,8 @@ public interface PixTransactionRepository extends JpaRepository<PixTransactionEn
     int updateStatusIfCancellable(@Param("txid") String txid, @Param("status") PixStatus status);
 
     List<PixTransactionEntity> findByStatus(PixStatus status);
+
+
+    @Query("SELECT p.status, p.valor FROM PixTransactionEntity p WHERE p.txid = :txid")
+    ResponsePixStatus findPixStatusByTxid(@Param("txid") String txid);
 }
