@@ -1,8 +1,5 @@
 package com.main.CrediLink.application.pix.service;
 
-import com.main.CrediLink.integration.banco.dto.PixPaymentRequest;
-import com.main.CrediLink.integration.banco.dto.PixPaymentResponse;
-import com.main.CrediLink.integration.banco.itau.service.ItauService;
 import com.main.CrediLink.application.pix.dto.RequestPixDTO;
 import com.main.CrediLink.application.pix.dto.ResponsePixDto;
 import com.main.CrediLink.application.pix.dto.ResponsePixSave;
@@ -10,6 +7,9 @@ import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
 import com.main.CrediLink.application.pix.exceptions.PixException;
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.utils.CurrentUserService;
+import com.main.CrediLink.integration.banco.dto.PixPaymentRequest;
+import com.main.CrediLink.integration.banco.dto.PixPaymentResponse;
+import com.main.CrediLink.integration.banco.itau.service.ItauService;
 import com.main.CrediLink.shared.dtos.ResponseDTO;
 import com.main.CrediLink.shared.enuns.PixStatus;
 import com.main.CrediLink.shared.utils.ValidadeValueUtils;
@@ -20,8 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 
 @Slf4j
 @Service
@@ -52,6 +50,8 @@ public class PixTransactionService {
         } catch (FeignException ex) {
             throw new PixException("Erro na integração com o banco", ex);
         } catch (Exception ex) {
+            System.out.println(ex);
+            System.out.println(ex.getMessage());
             throw new PixException("Erro inesperado ao criar cobrança Pix", ex);
         }
     }
@@ -62,15 +62,15 @@ public class PixTransactionService {
         PixTransactionEntity entity = buildPixTransactionEntity(dto, requestPixDTO);
 
         var pixTransaction = pixTransactionRepository.save(entity);
-
+        
         return new ResponsePixSave(
                 "success",
                 "Pix criado com sucesso",
                 new ResponsePixSave.Pix(
                         pixTransaction.getDataExpiracao(),
-                        pixTransaction.getPaymentAt(),
                         pixTransaction.getPixCopiaECola(),
                         pixTransaction.getTxid(),
+                        pixTransaction.getUsername(),
                         pixTransaction.getStatus(),
                         pixTransaction.getValor()
                 )
@@ -94,7 +94,7 @@ public class PixTransactionService {
         var value = ValidadeValueUtils.validateAndFormatAmount(valor);
 
         PixPaymentRequest request = new PixPaymentRequest(
-                new PixPaymentRequest.Calendario(600),
+                new PixPaymentRequest.Calendario(60),
                 new PixPaymentRequest.Valor((value)),
                 chavePix
         );
@@ -111,8 +111,6 @@ public class PixTransactionService {
         entity.setPixCopiaECola(dto.pixCopiaECola());
         entity.setLocation(dto.location());
         entity.setValor(dto.valor().original());
-        entity.setCriacao(Instant.parse(dto.calendario().criacao()));
-        entity.setExpiracao(dto.calendario().expiracao());
         entity.setAccountcode(userDTO.accountCode());
         entity.setUser(currentUserService.getCurrentUser());
         entity.setObservacao(userDTO.obs());
@@ -126,13 +124,11 @@ public class PixTransactionService {
     @Transactional
     public ResponseDTO cancelPix(String txid) {
 
-        System.out.println(txid);
 
         int updated = pixTransactionRepository
                 .updateStatusIfCancellable(
                         txid,
-                        PixStatus.CA,
-                        currentUserService.getCurrentUser());
+                        PixStatus.CA);
 
         if (updated == 0) {
             return new ResponseDTO("error", "Transação não encontrada ou já foi " +
@@ -147,8 +143,7 @@ public class PixTransactionService {
         int updated = pixTransactionRepository
                 .updateStatusIfCancellable(
                         txid,
-                        PixStatus.EX,
-                        currentUserService.getCurrentUser());
+                        PixStatus.EX);
 
         if (updated == 0) {
             log.warn("Nenhuma transação expirada. txid={} (não encontrada ou status inválido)", txid);

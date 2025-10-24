@@ -2,10 +2,10 @@ package com.main.CrediLink.application.webhook.service;
 
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.webhook.dto.WebhookNotificationDTO;
-import com.main.CrediLink.shared.enuns.PixStatus;
 import com.main.CrediLink.integration.ixc.service.InvoiceService;
 import com.main.CrediLink.integration.sippulse.dto.AddCreditDTO;
 import com.main.CrediLink.integration.sippulse.services.SipPulseService;
+import com.main.CrediLink.shared.enuns.PixStatus;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +33,27 @@ public class WebhookProcessor {
     @Async
     @Transactional
     public void processNotification(WebhookNotificationDTO notify) {
+
         pixTransactionRepository.findByTxid(notify.txid()).ifPresent(entity -> {
             if (entity.getStatus() == PixStatus.AT) {
                 try {
-                    entity.setPaymentAt(Instant.parse(notify.horario()));
+
+                    entity.setPaymentAt(Instant.now());
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
 
                     invoiceService.receiveInvoice(entity);
 
                     entity.setStatus(PixStatus.CO);
+
                     pixTransactionRepository.save(entity);
 
                     log.info("PIX txid={} processado com sucesso", notify.txid());
 
                 } catch (Exception e) {
+
                     log.error("Erro ao processar notificação PIX txid={} : {}", notify.txid(), e.getMessage(), e);
+
                 }
             }
         });

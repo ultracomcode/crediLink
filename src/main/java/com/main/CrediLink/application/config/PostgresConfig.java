@@ -60,10 +60,9 @@ public class PostgresConfig {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(true);
-        vendorAdapter.setGenerateDdl(true); // Importante para criação das tabelas
+        vendorAdapter.setGenerateDdl(true);
         em.setJpaVendorAdapter(vendorAdapter);
 
-        // Adicionar propriedades específicas do Hibernate
         HashMap<String, Object> jpaProperties = new HashMap<>();
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");

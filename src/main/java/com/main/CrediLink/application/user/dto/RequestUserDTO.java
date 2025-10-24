@@ -1,8 +1,6 @@
 package com.main.CrediLink.application.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.br.CNPJ;
-import org.hibernate.validator.constraints.br.CPF;
 
 public record RequestUserDTO(
         @NotBlank
@@ -18,7 +16,6 @@ public record RequestUserDTO(
         String password,
 
         @NotBlank
-        @CNPJ
         String cpfCnpj,
 
         @NotBlank

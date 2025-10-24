@@ -7,10 +7,6 @@ import lombok.*;
 
 import java.io.Serial;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 
 @Entity
 @Table(name = "pix_transaction")
@@ -76,6 +72,7 @@ public class PixTransactionEntity {
 
     @PrePersist
     private void prePersist() {
+        this.criacao = Instant.now();
         setUsernameAndDomain();
         setObservacaoIfNullOrVazio();
         calculateExpirationDate();
@@ -97,10 +94,7 @@ public class PixTransactionEntity {
 
 
     public void calculateExpirationDate() {
-        if (criacao != null && expiracao != null && expiracao.matches("\\d+")) {
-            long segundos = Long.parseLong(expiracao);
-            this.dataExpiracao = criacao.plusSeconds(segundos);
-        }
+        this.dataExpiracao = criacao.plusSeconds(600);
     }
 
 }

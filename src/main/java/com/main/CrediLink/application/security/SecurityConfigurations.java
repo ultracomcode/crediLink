@@ -33,6 +33,7 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
@@ -54,7 +55,6 @@ public class SecurityConfigurations {
                 .build();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -63,5 +63,20 @@ public class SecurityConfigurations {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("http://localhost:5173")); // no wildcard when credentials are used
+        cfg.setAllowCredentials(true);
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        // Optional: expose any custom headers you need to read from responses
+        cfg.setExposedHeaders(List.of("Authorization"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cfg);
+        return source;
     }
 }
