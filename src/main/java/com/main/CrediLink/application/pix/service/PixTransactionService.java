@@ -3,6 +3,7 @@ package com.main.CrediLink.application.pix.service;
 import com.main.CrediLink.application.pix.dto.RequestPixDTO;
 import com.main.CrediLink.application.pix.dto.ResponsePixDto;
 import com.main.CrediLink.application.pix.dto.ResponsePixSave;
+import com.main.CrediLink.application.pix.dto.ResponsePixStatus;
 import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
 import com.main.CrediLink.application.pix.exceptions.PixException;
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
@@ -87,6 +88,10 @@ public class PixTransactionService {
 
         return pixTransactionRepository.findByUserId(currentUserService.getCurrentUser().getId(), pageable)
                 .map(ResponsePixDto::fromEntity);
+    }
+
+    public ResponsePixStatus getByTxid(String txid) {
+        return pixTransactionRepository.findPixStatusByTxid(txid);
     }
 
     private PixPaymentRequest buildPixRequest(String valor) {
