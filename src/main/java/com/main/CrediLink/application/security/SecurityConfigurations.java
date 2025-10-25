@@ -45,7 +45,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/pix/create","/pix/cancel/*","/pix/expired/*").hasAnyRole("USER")
 
                         .requestMatchers(HttpMethod.GET, "/users/accountcodes").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/pix").hasAnyRole( "USER")
+                        .requestMatchers(HttpMethod.GET, "/pix","/pix/*").hasAnyRole( "USER")
 
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
