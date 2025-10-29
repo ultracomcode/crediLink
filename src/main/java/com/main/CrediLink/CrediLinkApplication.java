@@ -16,7 +16,6 @@ public class CrediLinkApplication {
 	public static void main(String[] args) {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
-
 		SpringApplication.run(CrediLinkApplication.class, args);
 	}
 
