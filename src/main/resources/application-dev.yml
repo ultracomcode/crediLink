@@ -31,6 +31,9 @@ spring:
           jobStore:
             useProperties: true
 
+  flyway:
+    enabled: true
+
 # =================================================================
 # CONFIGURACOES DO SIPPULSE (DEV)
 # =================================================================
@@ -40,10 +43,6 @@ sippulse:
     username: ${SIPPULSE_USERNAME_DB}
     password: ${SIPPULSE_PASSWORD_DB}
     driver-class-name: org.mariadb.jdbc.Driver
-  ws:
-    url: ${SIPPULSE_WS_URL}
-  loginPrincipal: ${SIPPULSE_LOGIN_PRINCIPAL}
-  passwordPrincipal: ${SIPPULSE_PASSWORD_PRINCIPAL}
 
 # =================================================================
 # API ITAU (DEV)
