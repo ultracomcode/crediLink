@@ -1,0 +1,73 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_NAME}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-timeout: 60000
+  jpa:
+    show-sql: true
+
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    scheduler-name: PixScheduler
+    properties:
+      org:
+        quartz:
+          threadPool:
+            threadCount: 5
+          jobStore:
+            useProperties: true
+
+  flyway:
+    enabled: true
+
+# =================================================================
+# CONFIGURACOES DO SIPPULSE (DEV)
+# =================================================================
+sippulse:
+  datasource:
+    url: jdbc:mariadb://${SIPPULSE_HOST_DB}:${SIPPULSE_PORT_DB}/${SIPPULSE_NAME_DB}
+    username: ${SIPPULSE_USERNAME_DB}
+    password: ${SIPPULSE_PASSWORD_DB}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+# =================================================================
+# API ITAU (DEV)
+# =================================================================
+itau:
+  api:
+    base-url: ${ITAU_API_BASE_URL}
+  api-url-access-token: ${ITAU_URL_API_ACCESS_TOKEN}
+  client-id: ${ITAU_CLIENT_ID}
+  client-secret: ${ITAU_CLIENT_SECRET}
+  chave:
+    pix: ${ITAU_CHAVE_PIX}
+  ssl:
+    keystore-path: ${ITAU_SSL_KEYSTORE_PATH}
+    keystore-password: ${ITAU_SSL_KEYSTORE_PASSWORD}
+
+jwt:
+  secret: ${JWT_SERCRET}
+
+crypto:
+  secret-key: ${CRYPTO_SECRET_KEY}
+  init-vector: ${CRYPTO_INIT_VECTOR}
+
+ixc:
+  api:
+    base-url: ${IXC_BASE_URL}
+
+

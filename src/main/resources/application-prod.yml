@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_NAME}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-timeout: 60000
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    scheduler-name: PixScheduler
+    properties:
+      org:
+        quartz:
+          threadPool:
+            threadCount: 10
+          jobStore:
+            useProperties: true
+
+logging:
+  level:
+    root: WARN
+    com.main: INFO
+    org.springframework: WARN

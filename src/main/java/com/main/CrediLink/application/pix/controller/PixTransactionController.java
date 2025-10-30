@@ -6,7 +6,6 @@ import com.main.CrediLink.application.pix.dto.ResponsePixSave;
 import com.main.CrediLink.application.pix.dto.ResponsePixStatus;
 import com.main.CrediLink.application.pix.service.PixTransactionService;
 import com.main.CrediLink.shared.dtos.ResponseDTO;
-import com.main.CrediLink.shared.enuns.PixStatus;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
