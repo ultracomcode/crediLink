@@ -43,15 +43,15 @@ public class UserEntity implements UserDetails {
 
     private String password;
 
-    @Column(unique = true)
+    @Column(name = "cpf_cnpj",unique = true)
     private String cpfCnpj;
 
     private String phone;
 
-    @Column(unique = true)
+    @Column(name = "id_crm", unique = true)
     private String idCrm;
 
-    @Column(unique = true)
+    @Column(name = "id_contrato", unique = true)
     private String idContrato;
 
     @Enumerated(EnumType.STRING)
