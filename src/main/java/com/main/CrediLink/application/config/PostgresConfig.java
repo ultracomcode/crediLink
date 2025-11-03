@@ -33,17 +33,6 @@ public class PostgresConfig {
         return new DataSourceProperties();
     }
 
-    @Bean
-    public boolean createSchemaIfNotExists(DataSource postgresDataSource) {
-        try (Connection conn = postgresDataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute("CREATE SCHEMA IF NOT EXISTS credilink");
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao criar schema credilink", e);
-        }
-        return true;
-    }
-
     @Primary
     @Bean
     public DataSource postgresDataSource() {
@@ -52,7 +41,6 @@ public class PostgresConfig {
 
     @Primary
     @Bean(name = "postgresEntityManager")
-    @DependsOn("createSchemaIfNotExists")
     public LocalContainerEntityManagerFactoryBean postgresEntityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(postgresDataSource());
@@ -64,9 +52,10 @@ public class PostgresConfig {
         em.setJpaVendorAdapter(vendorAdapter);
 
         HashMap<String, Object> jpaProperties = new HashMap<>();
-        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        jpaProperties.put("hibernate.default_schema", "credilink");
+        jpaProperties.put("hibernate.hbm2ddl.auto", "none");
+        jpaProperties.put("javax.persistence.schema-generation.database.action", "none");
+
         em.setJpaPropertyMap(jpaProperties);
 
         return em;
