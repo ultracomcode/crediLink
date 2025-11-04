@@ -29,9 +29,12 @@ spring:
       org:
         quartz:
           threadPool:
-            threadCount: 10
+            threadCount: 5
           jobStore:
-            useProperties: true
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            useProperties: false
 
 logging:
   level:
