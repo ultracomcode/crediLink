@@ -29,7 +29,10 @@ spring:
           threadPool:
             threadCount: 5
           jobStore:
-            useProperties: true
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            useProperties: false
 
   flyway:
     enabled: true
@@ -37,6 +40,7 @@ spring:
 # =================================================================
 # CONFIGURACOES DO SIPPULSE (DEV)
 # =================================================================
+
 sippulse:
   datasource:
     url: jdbc:mariadb://${SIPPULSE_HOST_DB}:${SIPPULSE_PORT_DB}/${SIPPULSE_NAME_DB}
