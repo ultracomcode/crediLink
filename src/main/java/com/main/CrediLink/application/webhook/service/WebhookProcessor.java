@@ -1,5 +1,6 @@
 package com.main.CrediLink.application.webhook.service;
 
+import com.main.CrediLink.application.pix.job.PixRequestExpiresService;
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.webhook.dto.WebhookNotificationDTO;
 import com.main.CrediLink.integration.ixc.service.InvoiceService;
@@ -19,13 +20,15 @@ public class WebhookProcessor {
     private static final Logger log = LoggerFactory.getLogger(WebhookProcessor.class);
 
     private final PixTransactionRepository pixTransactionRepository;
+    private final PixRequestExpiresService pixRequestExpiresService;
     private final SipPulseService sipPulseService;
     private final InvoiceService invoiceService;
 
-    public WebhookProcessor(PixTransactionRepository repo,
+    public WebhookProcessor(PixTransactionRepository repo, PixRequestExpiresService pixRequestExpiresService,
                             SipPulseService sipPulseService,
                             InvoiceService invoiceService) {
         this.pixTransactionRepository = repo;
+        this.pixRequestExpiresService = pixRequestExpiresService;
         this.sipPulseService = sipPulseService;
         this.invoiceService = invoiceService;
     }
@@ -41,6 +44,8 @@ public class WebhookProcessor {
                     entity.setPaymentAt(Instant.now());
 
                     sipPulseService.addCredit(AddCreditDTO.fromEntity(entity));
+
+                    pixRequestExpiresService.cancelPixExpirationJob(entity.getTxid());
 
                     invoiceService.receiveInvoice(entity);
 
