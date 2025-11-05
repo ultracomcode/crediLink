@@ -25,16 +25,21 @@ import java.util.List;
 public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfigurations(SecurityFilter securityFilter) {
+    public SecurityConfigurations(SecurityFilter securityFilter, CorsConfigurationSource corsConfigurationSource) {
         this.securityFilter = securityFilter;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+//                ## Descomentar para teste localhost
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
@@ -65,19 +70,5 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // Permite cookies e headers de autenticação
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Front-end VUE
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
-
 
 }
