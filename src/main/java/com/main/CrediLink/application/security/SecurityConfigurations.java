@@ -13,33 +13,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfigurations(SecurityFilter securityFilter, CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfigurations(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
-        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-
-//                ## Descomentar para teste localhost
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
