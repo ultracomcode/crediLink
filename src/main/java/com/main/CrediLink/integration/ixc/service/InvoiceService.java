@@ -114,7 +114,7 @@ public class InvoiceService {
                 pixTransactionEntity.getValor(),
                 "V",
                 "1",
-                pixTransactionEntity.getPaymentAt().toString(),
+                FormatterUtils.formatInstantToDate(pixTransactionEntity.getPaymentAt()),
                 "A",
                 "A",
                 pixTransactionEntity.getUser().getIdContrato(),
