@@ -15,10 +15,6 @@ spring:
       idle-timeout: 300000
       max-lifetime: 600000
       connection-timeout: 60000
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
 
   quartz:
     job-store-type: jdbc

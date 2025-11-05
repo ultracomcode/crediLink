@@ -20,4 +20,4 @@ logging:
     com.main: DEBUG
     org.springframework.ws: DEBUG
     com.main.service.WebhookPixService: INFO
-    org.hibernate: INFO
+    org.hibernate: WARN

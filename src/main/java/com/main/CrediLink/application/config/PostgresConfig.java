@@ -55,6 +55,8 @@ public class PostgresConfig {
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         jpaProperties.put("hibernate.hbm2ddl.auto", "none");
         jpaProperties.put("javax.persistence.schema-generation.database.action", "none");
+        jpaProperties.put("hibernate.show_sql", false);
+        jpaProperties.put("hibernate.format_sql", false);
 
         em.setJpaPropertyMap(jpaProperties);
 
