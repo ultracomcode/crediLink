@@ -29,7 +29,6 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<Page<ResponseUserDTO>> findAll(@PageableDefault(
-            size = 10,
             direction = Sort.Direction.ASC
     ) Pageable pageable){
 

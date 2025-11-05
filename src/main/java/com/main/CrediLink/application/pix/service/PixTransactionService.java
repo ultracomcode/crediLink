@@ -6,6 +6,7 @@ import com.main.CrediLink.application.pix.dto.ResponsePixSave;
 import com.main.CrediLink.application.pix.dto.ResponsePixStatus;
 import com.main.CrediLink.application.pix.entity.PixTransactionEntity;
 import com.main.CrediLink.application.pix.exceptions.PixException;
+import com.main.CrediLink.application.pix.job.PixRequestExpiresService;
 import com.main.CrediLink.application.pix.repository.PixTransactionRepository;
 import com.main.CrediLink.application.utils.CurrentUserService;
 import com.main.CrediLink.integration.banco.dto.PixPaymentRequest;
@@ -31,11 +32,13 @@ public class PixTransactionService {
     private final ItauService itauService;
     private final PixTransactionRepository pixTransactionRepository;
     private final CurrentUserService currentUserService;
+    private final PixRequestExpiresService pixRequestExpiresService;
 
-    public PixTransactionService(ItauService itauService, PixTransactionRepository pixTransactionRepository, CurrentUserService currentUserService) {
+    public PixTransactionService(ItauService itauService, PixTransactionRepository pixTransactionRepository, CurrentUserService currentUserService, PixRequestExpiresService pixRequestExpiresService) {
         this.itauService = itauService;
         this.pixTransactionRepository = pixTransactionRepository;
         this.currentUserService = currentUserService;
+        this.pixRequestExpiresService = pixRequestExpiresService;
     }
 
     @Transactional
@@ -48,6 +51,7 @@ public class PixTransactionService {
             var pixResponse = itauService.createCharge(pixPaymentRequest);
 
             return save(pixResponse, requestPixDTO);
+
         } catch (FeignException ex) {
             throw new PixException("Erro na integração com o banco", ex);
         } catch (Exception ex) {
@@ -63,7 +67,9 @@ public class PixTransactionService {
         PixTransactionEntity entity = buildPixTransactionEntity(dto, requestPixDTO);
 
         var pixTransaction = pixTransactionRepository.save(entity);
-        
+
+        pixRequestExpiresService.scheduleExpirationPix(pixTransaction.getTxid(), pixTransaction.getDataExpiracao());
+
         return new ResponsePixSave(
                 "success",
                 "Pix criado com sucesso",
@@ -99,7 +105,6 @@ public class PixTransactionService {
         var value = ValidadeValueUtils.validateAndFormatAmount(valor);
 
         PixPaymentRequest request = new PixPaymentRequest(
-                new PixPaymentRequest.Calendario(600),
                 new PixPaymentRequest.Valor((value)),
                 chavePix
         );
@@ -115,6 +120,7 @@ public class PixTransactionService {
         entity.setTxid(dto.txid());
         entity.setPixCopiaECola(dto.pixCopiaECola());
         entity.setLocation(dto.location());
+        entity.setExpiracao(dto.calendario().expiracao());
         entity.setValor(dto.valor().original());
         entity.setAccountcode(userDTO.accountCode());
         entity.setUser(currentUserService.getCurrentUser());
@@ -123,8 +129,6 @@ public class PixTransactionService {
 
         return entity;
     }
-
-
 
     @Transactional
     public ResponseDTO cancelPix(String txid) {

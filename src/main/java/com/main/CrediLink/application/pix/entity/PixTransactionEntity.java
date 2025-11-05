@@ -88,13 +88,12 @@ public class PixTransactionEntity {
 
     private void setObservacaoIfNullOrVazio() {
         if (this.observacao == null || this.observacao.isBlank()) {
-            this.observacao = "Recarga Telefonia Via Api";
+            this.observacao = "Ultracred - Recarga Telefonia Via Api";
         }
     }
 
-
     public void calculateExpirationDate() {
-        this.dataExpiracao = criacao.plusSeconds(600);
+        this.dataExpiracao = criacao.plusSeconds(Long.parseLong(this.expiracao));
     }
 
 }
