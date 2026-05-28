@@ -48,13 +48,15 @@ public class InvoiceService {
             throw new PixException("Nenhum registro encontrado para a venda: " + financialResponse.message());
         }
 
-        var invoice = invoiceResponse.registros().get(0);
+        var invoice = invoiceResponse.registros().getFirst();
+
+        var ixc = integrationService.findByTypeAndStatus(IntegrationsType.IXC);
 
         var request = new ReceiveInvoiceRequestDTO(
                 "1",
                 invoice.id(),
-                "7",
-                "1807",
+                ixc.getIdContaBanco(),
+                ixc.getIdContaContabil(),
                 "Pix",
                 FormatterUtils.formatInstantToDate(pixTransactionEntity.getPaymentAt()),
                 pixTransactionEntity.getValor(),
@@ -64,9 +66,7 @@ public class InvoiceService {
                 "R"
         );
 
-        var response = feingClientIxc.receiveInvoice(request);
-
-        return response;
+        return feingClientIxc.receiveInvoice(request);
     }
 
     private IxcResponseDTO getInvoiceBySalesId(String idSaida){
@@ -141,6 +141,6 @@ public class InvoiceService {
 
     private IxcMinimalDTO getMinimalDataIntegration(){
         return getProductsById(integrationService.findByTypeAndStatus(IntegrationsType.IXC).getIdProduto())
-                .registros().get(0);
+                .registros().getFirst();
     }
 }

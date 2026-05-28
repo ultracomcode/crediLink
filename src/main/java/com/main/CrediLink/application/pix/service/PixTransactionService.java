@@ -55,8 +55,6 @@ public class PixTransactionService {
         } catch (FeignException ex) {
             throw new PixException("Erro na integração com o banco", ex);
         } catch (Exception ex) {
-            System.out.println(ex);
-            System.out.println(ex.getMessage());
             throw new PixException("Erro inesperado ao criar cobrança Pix", ex);
         }
     }

@@ -1,6 +1,5 @@
 package com.main.CrediLink.application.pix.job;
 
-import com.main.CrediLink.application.webhook.service.WebhookProcessor;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
